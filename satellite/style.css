@@ -43,54 +43,6 @@ body {
   line-height: 1.6;
 }
 
-/* tooltip shown when hovering over Kosmosliebhaberin */
-.badge-word {
-  position: relative;
-  cursor: default;
-}
-
-.badge-word::after {
-  content: 'Lover of the Cosmos';
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background: var(--accent);
-  color: #ffffff;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-  padding: 6px 14px;
-  border-radius: 6px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.badge-word::before {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 4px);
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: var(--accent);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.badge-word:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.badge-word:hover::before {
-  opacity: 1;
-}
-
-
 button {
     width: 100%;
     margin-bottom: 4px;
