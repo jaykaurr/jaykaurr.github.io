@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>3D Satellite Tracker</title>
-<link rel="stylesheet" href="style.css" />
-
-<script type="importmap">
-{
-  "imports": {
-    "three":             "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
-    "three/addons/":     "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/",
-    "satellite":         "https://cdn.jsdelivr.net/npm/satellite.js@4.1.4/dist/satellite.es.js"
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Satellite Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three":         "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/",
+      "satellite":     "https://cdn.jsdelivr.net/npm/satellite.js@4.1.4/dist/satellite.es.js"
+    }
   }
-}
-</script>
+  </script>
 </head>
-
 <body>
-<div id="ui">
-  <h3>🛰 Live Satellites</h3>
-  <div id="sat-toggles"></div>
-</div>
 
-<div id="labels"></div>
+  <!-- Control panel -->
+  <div id="ui">
+    <h3>🛰 Live Satellites</h3>
+    <div id="sat-toggles"></div>
+  </div>
 
-<script type="module" src="script.js"></script>
+  <!-- Telemetry labels rendered over the canvas -->
+  <div id="labels"></div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>
