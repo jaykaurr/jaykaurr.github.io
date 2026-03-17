@@ -1,8 +1,5 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-// ─── satellite.js SGP4 (no backend needed) ───────────────────────────────────
-// Loaded via importmap in index.html as 'satellite'
 import * as satellite from 'satellite';
 
 const scene = new THREE.Scene();
@@ -13,7 +10,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 0, 7);
+// FIX 3: Camera pulled back to z=4 to match the reduced SCALE
+camera.position.set(0, 0, 4);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -40,10 +38,15 @@ sun.position.set(5, 3, 5);
 scene.add(sun);
 
 // ─── Satellite setup ──────────────────────────────────────────────────────────
-const SCALE = 40;
+// FIX 1: SCALE reduced from 40 → 5 so satellites orbit just outside Earth sphere
+// With Earth radius = 1 and SCALE = 5:
+//   ISS at 408 km  → r ≈ 1.32  (visible ring around Earth)
+//   Hubble at 547km → r ≈ 1.43
+//   NOAA at 870km  → r ≈ 1.68
+const SCALE = 5;
+
 const COLORS = [0xff4444, 0x00ff88, 0x4488ff, 0xffcc00];
 
-// Satellites to track — NORAD IDs + display names
 const SAT_IDS = [
   { id: '25544', name: 'ISS' },
   { id: '20580', name: 'Hubble' },
@@ -51,38 +54,33 @@ const SAT_IDS = [
   { id: '25994', name: 'Terra' },
 ];
 
-const satRecords = {};   // name → satrec object
-const satMeshes  = {};   // name → THREE.Mesh
-const satTrails  = {};   // name → { points, geom, line }
-const satLabels  = {};   // name → DOM div
+const satRecords = {};
+const satMeshes  = {};
+const satTrails  = {};
+const satLabels  = {};
 
-const labelContainer = document.getElementById('labels');
+const labelContainer  = document.getElementById('labels');
 const toggleContainer = document.getElementById('sat-toggles');
 
-// Status message while loading
 const statusEl = document.createElement('div');
 statusEl.style.cssText = 'color:#aaa;font-size:12px;margin-top:8px;';
 statusEl.textContent = 'Loading TLE data…';
 toggleContainer.parentElement.appendChild(statusEl);
 
-// ─── Fetch TLE directly from CelesTrak (no CORS issues) ──────────────────────
+// ─── Fetch TLE data ───────────────────────────────────────────────────────────
 async function fetchTLEs() {
   const results = [];
-
   for (const { id, name } of SAT_IDS) {
     try {
-      // CelesTrak GP API returns TLE text for a single satellite by NORAD ID
-      const url = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${id}&FORMAT=TLE`;
+      const url  = `https://celestrak.org/NORAD/elements/gp.php?CATNR=${id}&FORMAT=TLE`;
       const res  = await fetch(url);
       const text = await res.text();
       const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
 
       if (lines.length >= 3) {
-        // lines[0] = name line, lines[1] = TLE line 1, lines[2] = TLE line 2
         const satrec = satellite.twoline2satrec(lines[1], lines[2]);
         results.push({ name, satrec });
       } else if (lines.length === 2) {
-        // Some responses omit the name line
         const satrec = satellite.twoline2satrec(lines[0], lines[1]);
         results.push({ name, satrec });
       }
@@ -90,12 +88,12 @@ async function fetchTLEs() {
       console.warn(`Could not fetch TLE for ${name}:`, e);
     }
   }
-
   return results;
 }
 
-// ─── Convert lat/lon/alt → Three.js XYZ ──────────────────────────────────────
+// ─── Convert geodetic coords → Three.js XYZ ──────────────────────────────────
 function latLonAltToXYZ(lat, lon, alt) {
+  // alt is in km; Earth radius 6371 km; scene Earth radius = 1 unit
   const r   = 1 + (alt / 6371) * SCALE;
   const phi = (90 - lat) * Math.PI / 180;
   const tht = (lon + 180) * Math.PI / 180;
@@ -106,10 +104,10 @@ function latLonAltToXYZ(lat, lon, alt) {
   );
 }
 
-// ─── Propagate all satellites to current time ─────────────────────────────────
+// ─── Propagate all satellites ─────────────────────────────────────────────────
 function propagateAll() {
-  const now         = new Date();
-  const gmst        = satellite.gstime(now);
+  const now  = new Date();
+  const gmst = satellite.gstime(now);
 
   for (const [name, satrec] of Object.entries(satRecords)) {
     try {
@@ -119,7 +117,7 @@ function propagateAll() {
       const geo = satellite.eciToGeodetic(posVel.position, gmst);
       const lat  = satellite.degreesLat(geo.latitude);
       const lon  = satellite.degreesLong(geo.longitude);
-      const alt  = geo.height;   // km above ellipsoid
+      const alt  = geo.height;
 
       const pos = latLonAltToXYZ(lat, lon, alt);
       satMeshes[name].position.copy(pos);
@@ -130,55 +128,63 @@ function propagateAll() {
       if (trail.points.length > 300) trail.points.shift();
       trail.geom.setFromPoints(trail.points);
 
-      // Label
-      satLabels[name].innerHTML =
+      // FIX 2: Update label text AND make it visible after first data arrives
+      const label = satLabels[name];
+      label.innerHTML =
         `<strong>${name}</strong><br>` +
         `Lat: ${lat.toFixed(2)}°<br>` +
         `Lon: ${lon.toFixed(2)}°<br>` +
         `Alt: ${alt.toFixed(1)} km`;
 
+      // Show label only once real data has been populated
+      if (label.style.display === 'none') {
+        label.style.display = 'block';
+      }
+
     } catch (e) { /* skip bad propagation frame */ }
   }
 }
 
-// ─── Create scene objects for each satellite ──────────────────────────────────
+// ─── Create scene objects ─────────────────────────────────────────────────────
 function createSatelliteObjects(tleList) {
   tleList.forEach(({ name, satrec }, i) => {
     satRecords[name] = satrec;
     const color = COLORS[i % COLORS.length];
 
-    // Mesh
+    // Satellite dot mesh
     const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.06, 16, 16),
+      new THREE.SphereGeometry(0.04, 16, 16),
       new THREE.MeshBasicMaterial({ color })
     );
     scene.add(mesh);
     satMeshes[name] = mesh;
 
-    // Trail
+    // Orbital trail
     const geom = new THREE.BufferGeometry();
-    const line = new THREE.Line(geom, new THREE.LineBasicMaterial({
+    const line  = new THREE.Line(geom, new THREE.LineBasicMaterial({
       color, transparent: true, opacity: 0.6
     }));
     scene.add(line);
     satTrails[name] = { points: [], geom, line };
 
-    // HTML label
+    // FIX 2: Label starts hidden — shown only after propagateAll populates data
     const label = document.createElement('div');
     label.className = 'sat-label';
+    label.style.display = 'none';
     labelContainer.appendChild(label);
     satLabels[name] = label;
 
     // Toggle button
+    const colorHex = '#' + color.toString(16).padStart(6, '0');
     const btn = document.createElement('button');
     btn.innerText = name;
-    btn.style.borderLeft = `3px solid #${color.toString(16).padStart(6, '0')}`;
+    btn.style.borderLeft = `3px solid ${colorHex}`;
     btn.onclick = () => {
       const v = !mesh.visible;
-      mesh.visible  = v;
-      line.visible  = v;
+      mesh.visible       = v;
+      line.visible       = v;
       label.style.display = v ? 'block' : 'none';
-      btn.style.opacity = v ? '1' : '0.4';
+      btn.style.opacity   = v ? '1' : '0.4';
     };
     toggleContainer.appendChild(btn);
   });
@@ -191,11 +197,18 @@ function updateLabelPositions() {
   for (const name in satMeshes) {
     const mesh  = satMeshes[name];
     const label = satLabels[name];
-    if (!mesh.visible) continue;
+
+    // Skip if hidden or not yet shown
+    if (!mesh.visible || label.style.display === 'none') continue;
 
     const v = mesh.position.clone().project(camera);
-    label.style.left = `${(v.x *  0.5 + 0.5) * window.innerWidth  + 8}px`;
-    label.style.top  = `${(v.y * -0.5 + 0.5) * window.innerHeight    }px`;
+
+    // Clamp so labels never go off-screen edges
+    const x = Math.max(4, Math.min(window.innerWidth  - 140, (v.x *  0.5 + 0.5) * window.innerWidth  + 8));
+    const y = Math.max(4, Math.min(window.innerHeight - 80,  (v.y * -0.5 + 0.5) * window.innerHeight));
+
+    label.style.left = x + 'px';
+    label.style.top  = y + 'px';
   }
 }
 
@@ -207,7 +220,7 @@ fetchTLEs().then(tleList => {
   }
   createSatelliteObjects(tleList);
   propagateAll();
-  setInterval(propagateAll, 1000);   // update positions every second
+  setInterval(propagateAll, 1000);
 });
 
 // ─── Render loop ──────────────────────────────────────────────────────────────
