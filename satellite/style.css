@@ -15,6 +15,32 @@ body {
     max-width: 260px;
 }
 
+/* photo block inside experience card */
+.exp-photo-wrapper {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.exp-photo {
+  width: 100%;
+  max-width: 380px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  box-shadow: 0 6px 24px rgba(139, 69, 19, 0.1);
+}
+
+.exp-photo-caption {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
 button {
     width: 100%;
     margin-bottom: 4px;
