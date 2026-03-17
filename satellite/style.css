@@ -19,20 +19,30 @@ body {
 .exp-photo-wrapper {
   margin-top: 28px;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .exp-photo {
-  display: block;
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  object-position: center;
-  border-radius: 16px;
-  border: 2px solid rgba(139, 69, 19, 0.2);
-  box-shadow: 0 4px 16px rgba(139, 69, 19, 0.12);
-  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+  cursor: zoom-in;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* enlarges smoothly on hover */
+.exp-photo:hover {
+  width: 340px;
+  height: 220px;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(139, 69, 19, 0.2);
+  z-index: 10;
+  position: relative;
 }
 
 .exp-photo-caption {
@@ -40,7 +50,7 @@ body {
   font-size: 0.68rem;
   color: var(--text-dim);
   letter-spacing: 0.08em;
-  line-height: 1.6;
+  transition: opacity 0.3s;
 }
 
 button {
