@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- ============================================================
+     HEAD — fonts, meta, and all CSS styles
+============================================================ -->
 <head>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harjot Kaur — Aerospace Engineer</title>
 
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
 
-    /* ============================================================
-       COLOR VARIABLES — change your colors here in one place
-    ============================================================ */
+    /* =============================================================
+       SECTION 1 — COLOR VARIABLES
+       Edit all your colors in one place here.
+    ============================================================= */
+
     :root {
-      --bg:           #ffffff;       /* main background              */
-      --bg2:          #fdf6f0;       /* alternate section background */
-      --surface:      #fff8f3;       /* card background              */
-      --surface2:     #fdeee3;       /* card background variant      */
-      --accent:       #8b4513;       /* saddle brown — main color    */
-      --accent2:      #a0522d;       /* sienna — secondary           */
-      --accent3:      #cd853f;       /* tan — third accent           */
-      --text:         #2b1200;       /* primary text                 */
-      --text-muted:   #5c3317;       /* body / description text      */
-      --text-dim:     #b07850;       /* dates, labels, footer        */
-      --border:       rgba(139, 69, 19, 0.25);
-      --border2:      rgba(139, 69, 19, 0.18);
-      --glow:         rgba(139, 69, 19, 0.12);
+      --bg:          #ffffff;                    /* main page background          */
+      --bg2:         #fdf6f0;                    /* alternate section background  */
+      --surface:     #fff8f3;                    /* card background               */
+      --surface2:    #fdeee3;                    /* card background variant       */
+      --accent:      #8b4513;                    /* saddle brown — primary color  */
+      --accent2:     #a0522d;                    /* sienna — secondary accent     */
+      --accent3:     #cd853f;                    /* tan — third accent            */
+      --text:        #2b1200;                    /* primary text                  */
+      --text-muted:  #5c3317;                    /* body / description text       */
+      --text-dim:    #b07850;                    /* dates, labels, footer text    */
+      --border:      rgba(139, 69, 19, 0.25);   /* standard border               */
+      --border2:     rgba(139, 69, 19, 0.18);   /* lighter border                */
+      --glow:        rgba(139, 69, 19, 0.12);   /* shadow / glow tint            */
     }
 
 
-    /* ============================================================
-       RESET & BASE
-    ============================================================ */
-    *, *::before, *::after {
+    /* =============================================================
+       SECTION 2 — RESET & BASE STYLES
+    ============================================================= */
+
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -49,13 +63,16 @@
       background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
-      cursor: none;
+      cursor: none; /* hides default cursor — replaced by custom cursor below */
     }
 
 
-    /* ============================================================
-       CUSTOM CURSOR
-    ============================================================ */
+    /* =============================================================
+       SECTION 3 — CUSTOM CURSOR
+       Two layers: a small filled dot and a larger lagging ring.
+    ============================================================= */
+
+    /* small solid dot — follows mouse exactly */
     .cursor {
       width: 10px;
       height: 10px;
@@ -68,6 +85,7 @@
       z-index: 9999;
     }
 
+    /* larger ring — lags slightly behind the dot */
     .cursor-ring {
       width: 36px;
       height: 36px;
@@ -83,9 +101,11 @@
     }
 
 
-    /* ============================================================
-       STAR FIELD CANVAS (background)
-    ============================================================ */
+    /* =============================================================
+       SECTION 4 — STAR FIELD CANVAS
+       A fixed canvas behind all content with subtle twinkling stars.
+    ============================================================= */
+
     canvas#stars {
       position: fixed;
       inset: 0;
@@ -94,9 +114,10 @@
     }
 
 
-    /* ============================================================
-       NAVIGATION BAR
-    ============================================================ */
+    /* =============================================================
+       SECTION 5 — NAVIGATION BAR
+    ============================================================= */
+
     nav {
       position: fixed;
       top: 0;
@@ -112,6 +133,7 @@
       background: rgba(255, 250, 245, 0.92);
     }
 
+    /* ":harj:" logo text */
     .nav-logo {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -121,6 +143,7 @@
       text-decoration: none;
     }
 
+    /* horizontal list of nav links */
     .nav-links {
       display: flex;
       gap: 28px;
@@ -138,7 +161,7 @@
       position: relative;
     }
 
-    /* underline slide-in on hover */
+    /* animated underline that slides in on hover */
     .nav-links a::after {
       content: '';
       position: absolute;
@@ -158,17 +181,17 @@
       width: 100%;
     }
 
-
-    /* all sections sit above the canvas */
+    /* all sections sit above the star-field canvas */
     section {
       position: relative;
       z-index: 1;
     }
 
 
-    /* ============================================================
-       HERO SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 6 — HERO SECTION
+    ============================================================= */
+
     #hero {
       min-height: 100vh;
       display: flex;
@@ -179,6 +202,7 @@
       background: linear-gradient(135deg, #ffffff 60%, #fdeee3 100%);
     }
 
+    /* two-column layout: text left, satellite tracker right */
     .hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -206,7 +230,7 @@
       margin-bottom: 24px;
     }
 
-    /* pulsing dot inside badge */
+    /* pulsing dot inside the badge */
     .hero-badge .dot {
       width: 6px;
       height: 6px;
@@ -216,16 +240,23 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.4; transform: scale(0.7); }
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+      }
     }
 
-    /* tooltip appears when hovering over "Kosmosliebhaberin" */
+    /* "Lover of the Cosmos" tooltip on hover */
     .badge-word {
       position: relative;
       cursor: default;
     }
 
+    /* tooltip bubble that appears above the word */
     .badge-word::after {
       content: 'Lover of the Cosmos';
       position: absolute;
@@ -246,7 +277,7 @@
       z-index: 200;
     }
 
-    /* small downward arrow under tooltip */
+    /* small downward triangle arrow below the tooltip */
     .badge-word::before {
       content: '';
       position: absolute;
@@ -270,7 +301,7 @@
       opacity: 1;
     }
 
-    /* large name */
+    /* large name heading */
     .hero-name {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -281,13 +312,14 @@
       margin-bottom: 8px;
     }
 
-    /* "Kaur" — outlined/stroke style */
+    /* "Kaur" — rendered as an outlined stroke style */
     .hero-name .accent-line {
       display: block;
       color: transparent;
       -webkit-text-stroke: 1.5px var(--accent);
     }
 
+    /* "Aerospace Engineer · Astronautics" subtitle */
     .hero-title {
       font-family: 'DM Mono', monospace;
       font-size: 0.9rem;
@@ -297,6 +329,7 @@
       margin-bottom: 28px;
     }
 
+    /* summary paragraph */
     .hero-summary {
       font-size: 1rem;
       line-height: 1.75;
@@ -310,13 +343,14 @@
       font-weight: 600;
     }
 
+    /* row of CTA buttons */
     .hero-cta {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
     }
 
-    /* solid saddle brown button */
+    /* solid saddle-brown "View Experience" button */
     .btn-primary {
       display: inline-flex;
       align-items: center;
@@ -340,7 +374,7 @@
       box-shadow: 0 12px 40px rgba(139, 69, 19, 0.25);
     }
 
-    /* outline button */
+    /* outline "LinkedIn" button */
     .btn-secondary {
       display: inline-flex;
       align-items: center;
@@ -364,9 +398,11 @@
     }
 
 
-    /* ============================================================
-       SATELLITE TRACKER EMBED (hero right side)
-    ============================================================ */
+    /* =============================================================
+       SECTION 7 — SATELLITE TRACKER EMBED (hero right column)
+    ============================================================= */
+
+    /* flex column wrapper for the right side */
     .hero-visual {
       position: relative;
       display: flex;
@@ -375,6 +411,7 @@
       height: auto;
     }
 
+    /* "Live 3D Satellite Orbit Tracker" label */
     .satellite-embed-label {
       display: inline-flex;
       align-items: center;
@@ -394,6 +431,7 @@
       animation: pulse 2s infinite;
     }
 
+    /* the embedded iframe */
     .satellite-iframe {
       width: 100%;
       height: 400px;
@@ -403,6 +441,7 @@
       background: #000;
     }
 
+    /* "View in New Screen" link below iframe */
     .satellite-open-btn {
       align-self: flex-end;
       font-family: 'DM Mono', monospace;
@@ -421,15 +460,19 @@
     }
 
 
-    /* ============================================================
-       SHARED SECTION LAYOUT
-    ============================================================ */
+    /* =============================================================
+       SECTION 8 — SHARED SECTION LAYOUT
+       Reused by Education, Experience, Research, Skills, Projects, Leadership.
+    ============================================================= */
+
+    /* centered content wrapper with consistent padding */
     .section-inner {
       max-width: 1200px;
       margin: 0 auto;
       padding: 100px 60px;
     }
 
+    /* row with a brown tag pill and a horizontal fading line */
     .section-header {
       display: flex;
       align-items: center;
@@ -451,7 +494,7 @@
       white-space: nowrap;
     }
 
-    /* horizontal fading line after section tag */
+    /* decorative line that fades to the right */
     .section-line {
       flex: 1;
       height: 1px;
@@ -459,11 +502,12 @@
     }
 
 
-    /* ============================================================
-       HIGHLIGHTS STRIP
+    /* =============================================================
+       SECTION 9 — HIGHLIGHTS STRIP
        Sits between hero and education.
-       Shows key partnerships and accomplishments at a glance.
-    ============================================================ */
+       Four cards summarising key achievements at a glance.
+    ============================================================= */
+
     #highlights {
       background: var(--bg);
       border-top: 1px solid rgba(139, 69, 19, 0.08);
@@ -472,6 +516,7 @@
       z-index: 1;
     }
 
+    /* four-column grid with no gap (cards share borders) */
     .highlights-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -481,7 +526,7 @@
       gap: 0;
     }
 
-    /* each card — divider lines between them via border-right */
+    /* individual highlight card */
     .highlight-card {
       padding: 32px 36px;
       border-right: 1px solid rgba(139, 69, 19, 0.12);
@@ -489,15 +534,17 @@
       transition: background 0.25s ease;
     }
 
+    /* last card has no right border */
     .highlight-card:last-child {
       border-right: none;
     }
 
+    /* subtle background tint on hover */
     .highlight-card:hover {
       background: var(--surface);
     }
 
-    /* colored top-edge accent bar — each card gets its own shade */
+    /* short colored bar at top of each card */
     .highlight-card::before {
       content: '';
       position: absolute;
@@ -508,6 +555,7 @@
       border-radius: 0 0 2px 2px;
     }
 
+    /* each card gets its own shade of brown */
     .highlight-card:nth-child(1)::before { background: var(--accent); }
     .highlight-card:nth-child(2)::before { background: var(--accent2); }
     .highlight-card:nth-child(3)::before { background: var(--accent3); }
@@ -523,7 +571,7 @@
       margin-bottom: 12px;
     }
 
-    /* main bold title */
+    /* main bold card title */
     .hl-title {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -533,7 +581,7 @@
       margin-bottom: 6px;
     }
 
-    /* subtitle */
+    /* one or two sentence description */
     .hl-sub {
       font-size: 0.82rem;
       color: var(--text-muted);
@@ -541,13 +589,14 @@
       margin-bottom: 18px;
     }
 
-    /* small keyword tags at the bottom */
+    /* row of small keyword chips */
     .hl-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
 
+    /* individual keyword chip */
     .hl-tag {
       font-family: 'DM Mono', monospace;
       font-size: 0.62rem;
@@ -559,34 +608,41 @@
       letter-spacing: 0.04em;
     }
 
-    /* responsive: 2 columns on medium screens */
+    /* medium screens: collapse to 2-column grid */
     @media (max-width: 900px) {
+
       .highlights-inner {
         grid-template-columns: repeat(2, 1fr);
       }
 
+      /* card 2 ends row 1 — remove right border */
       .highlight-card:nth-child(2) {
         border-right: none;
       }
 
+      /* card 3 starts row 2 — add top + right border */
       .highlight-card:nth-child(3) {
         border-right: 1px solid rgba(139, 69, 19, 0.12);
         border-top: 1px solid rgba(139, 69, 19, 0.12);
       }
 
+      /* card 4 — top border only */
       .highlight-card:nth-child(4) {
         border-top: 1px solid rgba(139, 69, 19, 0.12);
       }
+
     }
 
 
-    /* ============================================================
-       EDUCATION SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 10 — EDUCATION
+    ============================================================= */
+
     #education {
       background: var(--bg2);
     }
 
+    /* single-row card: degree left, grad date right */
     .edu-card {
       background: #ffffff;
       border: 1px solid rgba(139, 69, 19, 0.2);
@@ -615,13 +671,13 @@
       margin-bottom: 20px;
     }
 
+    /* row of course chips */
     .edu-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
 
-    /* each course/subject chip */
     .edu-chip {
       font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
@@ -633,6 +689,7 @@
       letter-spacing: 0.05em;
     }
 
+    /* right column: graduation date */
     .edu-grad {
       text-align: right;
     }
@@ -656,9 +713,10 @@
     }
 
 
-    /* ============================================================
-       EXPERIENCE SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 11 — EXPERIENCE
+    ============================================================= */
+
     #experience {
       background: var(--bg);
     }
@@ -675,7 +733,7 @@
       box-shadow: 0 2px 20px rgba(139, 69, 19, 0.06);
     }
 
-    /* left accent stripe */
+    /* decorative left accent stripe */
     .exp-card::before {
       content: '';
       position: absolute;
@@ -687,12 +745,14 @@
       border-radius: 3px 0 0 3px;
     }
 
+    /* slide right slightly on hover */
     .exp-card:hover {
       border-color: rgba(139, 69, 19, 0.35);
       transform: translateX(4px);
       box-shadow: 0 8px 40px rgba(139, 69, 19, 0.1);
     }
 
+    /* top row: company + date */
     .exp-meta {
       display: flex;
       align-items: flex-start;
@@ -717,7 +777,7 @@
       margin-top: 4px;
     }
 
-    /* date pill on the right */
+    /* date range pill on the right */
     .exp-period {
       font-family: 'DM Mono', monospace;
       font-size: 0.72rem;
@@ -743,7 +803,7 @@
       line-height: 1.65;
     }
 
-    /* brown arrow bullet */
+    /* brown arrow used as bullet */
     .exp-points li::before {
       content: '▸';
       position: absolute;
@@ -757,7 +817,7 @@
       font-weight: 600;
     }
 
-    /* photo inside experience card */
+    /* photo + caption row */
     .exp-photo-wrapper {
       margin-top: 28px;
       display: flex;
@@ -787,22 +847,24 @@
     }
 
 
-    /* ============================================================
-       RESEARCH SECTION — INTERACTIVE CLICK-TO-EXPAND
-       Default: emoji, title, tag, role, date
-       Click: description slides open
-    ============================================================ */
+    /* =============================================================
+       SECTION 12 — RESEARCH CARDS (click-to-expand)
+       Default: icon, tag, title, role, date, hint.
+       On click: adds class "open" and description slides in.
+    ============================================================= */
+
     #research {
       background: var(--bg2);
     }
 
+    /* auto-fill grid — cards are at least 340px wide */
     .research-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 24px;
     }
 
-    /* card is clickable */
+    /* base card — cursor:pointer because it is clickable */
     .research-card {
       background: #ffffff;
       border: 1px solid var(--border2);
@@ -815,7 +877,7 @@
       box-shadow: 0 2px 16px rgba(139, 69, 19, 0.05);
     }
 
-    /* subtle corner glow */
+    /* radial glow in top-right corner */
     .research-card::after {
       content: '';
       position: absolute;
@@ -827,20 +889,21 @@
       pointer-events: none;
     }
 
+    /* lift on hover (only when NOT open) */
     .research-card:hover {
       border-color: rgba(139, 69, 19, 0.3);
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(139, 69, 19, 0.1);
     }
 
-    /* card stays flat when open */
+    /* stay flat when description is open */
     .research-card.open {
       border-color: rgba(139, 69, 19, 0.4);
       box-shadow: 0 12px 40px rgba(139, 69, 19, 0.12);
       transform: translateY(0);
     }
 
-    /* emoji icon box */
+    /* small square emoji icon at top */
     .research-icon {
       width: 44px;
       height: 44px;
@@ -895,7 +958,7 @@
       margin-bottom: 0;
     }
 
-    /* "▸ Click to read more" hint */
+    /* "Click to read more" prompt */
     .research-hint {
       font-family: 'DM Mono', monospace;
       font-size: 0.65rem;
@@ -908,23 +971,24 @@
       transition: color 0.2s;
     }
 
-    /* arrow before hint text */
+    /* arrow rendered as pseudo-element */
     .research-hint::before {
       content: '▸';
       font-size: 0.6rem;
       transition: transform 0.3s ease;
     }
 
-    /* arrow rotates 90° when card is open */
+    /* rotate arrow 90 degrees when card is open */
     .research-card.open .research-hint::before {
       transform: rotate(90deg);
     }
 
+    /* hint text turns accent color when open */
     .research-card.open .research-hint {
       color: var(--accent);
     }
 
-    /* description — collapsed by default, expands on click */
+    /* collapsed by default: zero height and invisible */
     .research-desc {
       font-size: 0.88rem;
       line-height: 1.7;
@@ -936,6 +1000,7 @@
       transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.3s ease;
     }
 
+    /* open state: slides down and becomes visible */
     .research-card.open .research-desc {
       max-height: 600px;
       opacity: 1;
@@ -948,9 +1013,10 @@
     }
 
 
-    /* ============================================================
-       SKILLS SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 13 — SKILLS
+    ============================================================= */
+
     #skills {
       background: var(--bg);
     }
@@ -988,7 +1054,7 @@
       gap: 8px;
     }
 
-    /* short line before category title */
+    /* short line before the category title */
     .skill-group-title::before {
       content: '';
       width: 18px;
@@ -1015,14 +1081,16 @@
     }
 
 
-    /* ============================================================
-       PROJECTS SECTION — INTERACTIVE CLICK-TO-EXPAND
-       Same interaction pattern as research cards
-    ============================================================ */
+    /* =============================================================
+       SECTION 14 — PERSONAL PROJECTS (click-to-expand)
+       Same interaction pattern as research cards.
+    ============================================================= */
+
     #projects {
       background: var(--bg2);
     }
 
+    /* two-column grid */
     .projects-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1042,20 +1110,21 @@
       box-shadow: 0 2px 16px rgba(139, 69, 19, 0.05);
     }
 
+    /* lift on hover */
     .project-card:hover {
       border-color: rgba(139, 69, 19, 0.35);
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(139, 69, 19, 0.1);
     }
 
-    /* stays flat when open */
+    /* stay flat when open */
     .project-card.open {
       border-color: rgba(139, 69, 19, 0.4);
       box-shadow: 0 12px 40px rgba(139, 69, 19, 0.12);
       transform: translateY(0);
     }
 
-    /* large faded number in the corner */
+    /* large faded number in top-right corner */
     .project-num {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -1084,7 +1153,7 @@
       margin-bottom: 14px;
     }
 
-    /* "▸ Click to read more" hint */
+    /* "Click to read more" hint */
     .project-hint {
       font-family: 'DM Mono', monospace;
       font-size: 0.65rem;
@@ -1097,22 +1166,24 @@
       transition: color 0.2s;
     }
 
+    /* arrow pseudo-element */
     .project-hint::before {
       content: '▸';
       font-size: 0.6rem;
       transition: transform 0.3s ease;
     }
 
-    /* arrow rotates when open */
+    /* rotate arrow when card is open */
     .project-card.open .project-hint::before {
       transform: rotate(90deg);
     }
 
+    /* hint turns accent color when open */
     .project-card.open .project-hint {
       color: var(--accent);
     }
 
-    /* description — collapsed by default, expands on click */
+    /* collapsed by default */
     .project-desc {
       font-size: 0.9rem;
       color: var(--text-muted);
@@ -1124,6 +1195,7 @@
       transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.3s ease;
     }
 
+    /* open: slides into view */
     .project-card.open .project-desc {
       max-height: 400px;
       opacity: 1;
@@ -1131,9 +1203,10 @@
     }
 
 
-    /* ============================================================
-       LEADERSHIP SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 15 — LEADERSHIP & OUTREACH
+    ============================================================= */
+
     #leadership {
       background: var(--bg);
     }
@@ -1144,6 +1217,7 @@
       gap: 16px;
     }
 
+    /* three-column row: accent bar | content | date */
     .lead-item {
       display: grid;
       grid-template-columns: 3px 1fr auto;
@@ -1153,7 +1227,7 @@
       border-bottom: 1px solid rgba(139, 69, 19, 0.1);
     }
 
-    /* vertical brown gradient line on left */
+    /* vertical gradient bar on the far left */
     .lead-line {
       width: 3px;
       height: 100%;
@@ -1184,7 +1258,7 @@
       line-height: 1.65;
     }
 
-    /* date on the right */
+    /* date string on far right */
     .lead-period {
       font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
@@ -1196,14 +1270,16 @@
     }
 
 
-    /* ============================================================
-       CONTACT SECTION
-    ============================================================ */
+    /* =============================================================
+       SECTION 16 — CONTACT
+    ============================================================= */
+
     #contact {
       background: var(--bg2);
       text-align: center;
     }
 
+    /* narrow centered column */
     .contact-inner {
       max-width: 700px;
       margin: 0 auto;
@@ -1220,7 +1296,7 @@
       color: var(--accent);
     }
 
-    /* "Connect" — outlined stroke style */
+    /* "Connect" rendered as outlined stroke */
     .contact-heading .stroke {
       color: transparent;
       -webkit-text-stroke: 1.5px var(--accent);
@@ -1233,6 +1309,7 @@
       margin-bottom: 40px;
     }
 
+    /* row of contact buttons */
     .contact-links {
       display: flex;
       gap: 16px;
@@ -1257,7 +1334,7 @@
       box-shadow: 0 2px 12px rgba(139, 69, 19, 0.06);
     }
 
-    /* hover fills button brown */
+    /* fills brown on hover */
     .contact-link:hover {
       color: #ffffff;
       background: var(--accent);
@@ -1271,9 +1348,10 @@
     }
 
 
-    /* ============================================================
-       FOOTER
-    ============================================================ */
+    /* =============================================================
+       SECTION 17 — FOOTER
+    ============================================================= */
+
     footer {
       position: relative;
       z-index: 1;
@@ -1297,10 +1375,12 @@
     }
 
 
-    /* ============================================================
-       SCROLL REVEAL ANIMATION
-       Elements with class "reveal" fade in when scrolled into view
-    ============================================================ */
+    /* =============================================================
+       SECTION 18 — SCROLL REVEAL ANIMATION
+       .reveal starts invisible.
+       JS adds .visible when element enters the viewport.
+    ============================================================= */
+
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -1313,46 +1393,273 @@
     }
 
 
-    /* ============================================================
-       SCROLLBAR
-    ============================================================ */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: rgba(139, 69, 19, 0.3); border-radius: 2px; }
+    /* =============================================================
+       SECTION 19 — CUSTOM SCROLLBAR
+    ============================================================= */
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 69, 19, 0.3);
+      border-radius: 2px;
+    }
 
 
     /* ============================================================
-       MOBILE RESPONSIVE
+       GALLERY SECTION
     ============================================================ */
+    #gallery {
+      background: var(--bg);
+    }
+
+    .gallery-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+
+    .gallery-filter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid rgba(139, 69, 19, 0.2);
+      border-radius: 4px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .gallery-filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .gallery-filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Masonry-style 3-column grid */
+    .gallery-grid {
+      columns: 3;
+      column-gap: 16px;
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid rgba(139, 69, 19, 0.15);
+      box-shadow: 0 2px 16px rgba(139, 69, 19, 0.06);
+      cursor: default;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .gallery-item.hidden {
+      display: none;
+    }
+
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: transform 0.45s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    /* caption slides up on hover */
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 36px 18px 16px;
+      background: linear-gradient(to top, rgba(43, 18, 0, 0.82) 0%, transparent 100%);
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+    }
+
+    .gallery-item:hover .gallery-caption {
+      transform: translateY(0);
+    }
+
+    .gallery-caption-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .gallery-caption-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* small category pill in top-left */
+    .gallery-cat-dot {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: rgba(139, 69, 19, 0.72);
+      backdrop-filter: blur(4px);
+      padding: 3px 9px;
+      border-radius: 3px;
+      z-index: 2;
+    }
+
+    /* placeholder tile shown before you add real photos */
+    .gallery-placeholder {
+      width: 100%;
+      background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 44px 20px;
+      min-height: 180px;
+    }
+
+    .gallery-placeholder-icon {
+      font-size: 2rem;
+      opacity: 0.45;
+    }
+
+    .gallery-placeholder-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .gallery-grid { columns: 2; }
+    }
+
+    /* =============================================================
+       SECTION 20 — MOBILE RESPONSIVE
+    ============================================================= */
+
     @media (max-width: 768px) {
-      nav               { padding: 16px 24px; }
-      .nav-links        { display: none; }
-      .hero-grid        { grid-template-columns: 1fr; }
-      .hero-visual      { display: none; }
-      .section-inner    { padding: 70px 24px; }
-      .projects-grid    { grid-template-columns: 1fr; }
-      .edu-card         { grid-template-columns: 1fr; }
-      footer            { flex-direction: column; gap: 8px; text-align: center; }
-      #hero             { padding: 100px 24px 60px; }
-      .highlights-inner { grid-template-columns: 1fr; padding: 32px 24px; }
-      .highlight-card   { border-right: none; border-bottom: 1px solid rgba(139, 69, 19, 0.12); }
-      .highlight-card:last-child { border-bottom: none; }
+
+      nav {
+        padding: 16px 24px;
+      }
+
+      /* hide nav links on small screens */
+      .nav-links {
+        display: none;
+      }
+
+      /* hero: single column, satellite embed hidden */
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      /* reduce section padding */
+      .section-inner {
+        padding: 70px 24px;
+      }
+
+      /* project cards: one per row on mobile */
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* education card: single column on mobile */
+      .edu-card {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+
+      #hero {
+        padding: 100px 24px 60px;
+      }
+
+      /* highlights: single column on mobile */
+      .highlights-inner {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+      }
+
+      /* replace right border with bottom border when stacked */
+      .highlight-card {
+        border-right: none;
+        border-bottom: 1px solid rgba(139, 69, 19, 0.12);
+      }
+
+      .highlight-card:last-child {
+        border-bottom: none;
+      }
+
+      .gallery-grid {
+        columns: 1;
+      }
+
     }
 
   </style>
+
 </head>
+
+
+<!-- ============================================================
+     BODY
+============================================================ -->
 <body>
 
+  <!-- Custom cursor elements (positioned by JavaScript) -->
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Star field background canvas -->
   <canvas id="stars"></canvas>
 
 
-  <!-- ============================================================
-       NAVIGATION
-  ============================================================ -->
+  <!-- ==========================================================
+       NAVIGATION BAR
+  ========================================================== -->
   <nav>
+
     <a href="#hero" class="nav-logo">:harj:</a>
+
     <ul class="nav-links">
       <li><a href="#highlights">Highlights</a></li>
       <li><a href="#education">Education</a></li>
@@ -1360,31 +1667,38 @@
       <li><a href="#research">Research</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#gallery">Gallery</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+
   </nav>
 
 
-  <!-- ============================================================
-       HERO
-  ============================================================ -->
+  <!-- ==========================================================
+       HERO SECTION
+  ========================================================== -->
   <section id="hero">
     <div class="hero-grid">
 
-      <!-- Left: text content -->
+      <!-- Left column: text -->
       <div>
+
+        <!-- Pill badge with hover tooltip -->
         <div class="hero-badge">
           <span class="dot"></span>
           <span class="badge-word">Kosmosliebhaberin</span>
         </div>
 
+        <!-- Large name heading -->
         <h1 class="hero-name">
           Harjot
           <span class="accent-line">Kaur</span>
         </h1>
 
+        <!-- Subtitle / role -->
         <p class="hero-title">Aerospace Engineer · Astronautics</p>
 
+        <!-- Summary paragraph -->
         <p class="hero-summary">
           Undergraduate Aerospace Engineer with research experience in
           <strong>aeroacoustics, systems integration</strong>, and
@@ -1395,14 +1709,17 @@
           <strong>Collins Aerospace / RTX Corporation</strong>.
         </p>
 
+        <!-- Call-to-action buttons -->
         <div class="hero-cta">
           <a href="#experience" class="btn-primary">View Experience →</a>
           <a href="https://www.linkedin.com/in/harjottkaurr/" target="_blank" class="btn-secondary">LinkedIn ↗</a>
         </div>
+
       </div>
 
-      <!-- Right: live satellite tracker embed -->
+      <!-- Right column: live satellite tracker -->
       <div class="hero-visual">
+
         <div class="satellite-embed-label">
           <span class="dot"></span>
           Live 3D Satellite Orbit Tracker
@@ -1419,32 +1736,33 @@
         <a href="satellite/index.html" target="_blank" class="satellite-open-btn">
           View in New Screen ↗
         </a>
+
       </div>
 
     </div>
   </section>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
        HIGHLIGHTS STRIP
-       Key partnerships and accomplishments at a glance.
-       Sits between hero and education.
-  ============================================================ -->
+       Four cards highlighting key partnerships and achievements.
+  ========================================================== -->
   <section id="highlights">
     <div class="highlights-inner">
 
-      <div class="section-header reveal">
-        <span class="section-tag">01 — Highlights</span>
-        <div class="section-line"></div>
-      </div>
-      
       <!-- Card 1: Collins Aerospace -->
       <div class="highlight-card reveal">
         <div class="hl-label">Industry</div>
-        <div class="hl-title">3x Intern at Collins Aerospace · RTX Corporation</div>
+        <div class="hl-title">Collins Aerospace · RTX</div>
+        <div class="hl-sub">
+          Systems / Software Engineering Intern across 3 consecutive
+          summers, working on certified avionics software for
+          Bombardier &amp; Airbus aircraft.
+        </div>
         <div class="hl-tags">
           <span class="hl-tag">DO-178B</span>
           <span class="hl-tag">FMS / HMI</span>
+          <span class="hl-tag">3× Internships</span>
           <span class="hl-tag">Python Testing</span>
         </div>
       </div>
@@ -1452,11 +1770,17 @@
       <!-- Card 2: Honeywell + NASA -->
       <div class="highlight-card reveal">
         <div class="hl-label">Research</div>
-        <div class="hl-title">Honeywell Aerospace</div>
+        <div class="hl-title">Honeywell &amp; NASA</div>
+        <div class="hl-sub">
+          Led APU noise reduction research with Honeywell Aerospace
+          and spearheaded structural design for a lunar sampling
+          rover in NASA RASC-AL.
+        </div>
         <div class="hl-tags">
           <span class="hl-tag">Aeroacoustics</span>
-          <span class="hl-tag">APU Noise Reduction</span>
+          <span class="hl-tag">Lunar Rover</span>
           <span class="hl-tag">Project Lead</span>
+          <span class="hl-tag">6 Projects</span>
         </div>
       </div>
 
@@ -1464,11 +1788,33 @@
       <div class="highlight-card reveal">
         <div class="hl-label">Personal Projects</div>
         <div class="hl-title">Live Space Systems</div>
+        <div class="hl-sub">
+          Built a real-time 3D satellite tracking system using
+          SGP4 propagation and a CubeSat simulation with
+          autonomous FDIR fault recovery logic.
+        </div>
         <div class="hl-tags">
           <span class="hl-tag">SGP4 / TLE</span>
           <span class="hl-tag">FDIR Logic</span>
           <span class="hl-tag">Python &amp; JS</span>
-          <span class="hl-tag">Live Tracker</span>
+          <span class="hl-tag">Live Demo</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Leadership -->
+      <div class="highlight-card reveal">
+        <div class="hl-label">Leadership &amp; Outreach</div>
+        <div class="hl-title">15,000+ Students</div>
+        <div class="hl-sub">
+          TA for FSE 100, SPARKS STEM Ambassador, Community
+          Assistant, and Gold Guide — mentoring and welcoming
+          students at ASU.
+        </div>
+        <div class="hl-tags">
+          <span class="hl-tag">Teaching</span>
+          <span class="hl-tag">STEM Mentor</span>
+          <span class="hl-tag">Gold Guide</span>
+          <span class="hl-tag">Community</span>
         </div>
       </div>
 
@@ -1476,18 +1822,20 @@
   </section>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
        EDUCATION
-  ============================================================ -->
+  ========================================================== -->
   <section id="education">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">02 — Education</span>
+        <span class="section-tag">01 — Education</span>
         <div class="section-line"></div>
       </div>
 
       <div class="edu-card reveal">
+
+        <!-- Left: degree info -->
         <div>
           <div class="edu-degree">B.E. Aerospace Engineering (Astronautics)</div>
           <div class="edu-school">Arizona State University · Tempe, AZ</div>
@@ -1502,28 +1850,34 @@
             <span class="edu-chip">Avionics Systems</span>
           </div>
         </div>
+
+        <!-- Right: graduation date -->
         <div class="edu-grad">
           <div class="edu-grad-label">Graduating</div>
           <div class="edu-grad-date">May<br/>2026</div>
         </div>
+
       </div>
 
     </div>
   </section>
 
 
-  <!-- ============================================================
-       EXPERIENCE
-  ============================================================ -->
+  <!-- ==========================================================
+       INDUSTRY EXPERIENCE
+  ========================================================== -->
   <section id="experience">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">03 — Industry Experience</span>
+        <span class="section-tag">02 — Industry Experience</span>
         <div class="section-line"></div>
       </div>
 
+      <!-- Collins Aerospace card -->
       <div class="exp-card reveal">
+
+        <!-- Company name + date range -->
         <div class="exp-meta">
           <div>
             <div class="exp-company">Collins Aerospace · RTX Corporation</div>
@@ -1532,7 +1886,9 @@
           <span class="exp-period">Summers from May 2023 – Aug 2025</span>
         </div>
 
+        <!-- Bullet-point responsibilities -->
         <ul class="exp-points">
+
           <li>
             Contributed to design, development, and verification of
             <strong>Flight User Interface (FUI)</strong> and
@@ -1540,25 +1896,31 @@
             System (FMS) software for Bombardier and Airbus aircraft —
             across three consecutive internships.
           </li>
+
           <li>
             Completed <strong>DO-178B training</strong>, gaining expertise in
             safety-critical software certification and the avionics software lifecycle.
           </li>
+
           <li>
             Performed <strong>Python-based functional and high-level testing</strong>
             to validate FMS logic and ensure compliance with certification standards.
           </li>
+
           <li>
             Utilized <strong>JAMA, JIRA, and Confluence</strong> to manage requirements
             traceability and defect resolution within the software development process.
           </li>
+
           <li>
             Operated a <strong>flight-deck simulation rig</strong> to assess real-time
             FMS behavior, developing deep understanding of cockpit workflows and
             autonomous decision logic.
           </li>
+
         </ul>
 
+        <!-- Photo + caption -->
         <!-- Replace me.jpg with your actual photo filename -->
         <div class="exp-photo-wrapper">
           <img src="me.jpg" alt="Harjot Kaur at Collins Aerospace" class="exp-photo" />
@@ -1574,14 +1936,16 @@
   </section>
 
 
-  <!-- ============================================================
-       RESEARCH — click any card to expand description
-  ============================================================ -->
+  <!-- ==========================================================
+       RESEARCH EXPERIENCE
+       Click any card to expand its description.
+       Click again to collapse.
+  ========================================================== -->
   <section id="research">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">04 — Research Experience</span>
+        <span class="section-tag">03 — Research Experience</span>
         <div class="section-line"></div>
       </div>
 
@@ -1627,7 +1991,7 @@
           </div>
         </div>
 
-        <!-- Card 3: Cube Sounder -->
+        <!-- Card 3: Cube Sounder Balloon -->
         <div class="research-card reveal" onclick="toggleCard(this)">
           <div class="research-icon">📡</div>
           <span class="research-tag">ASU · Systems Engineering</span>
@@ -1685,7 +2049,7 @@
           </div>
         </div>
 
-        <!-- Card 6: EPICS -->
+        <!-- Card 6: EPICS Vietnam -->
         <div class="research-card reveal" onclick="toggleCard(this)">
           <div class="research-icon">🌱</div>
           <span class="research-tag">ASU · EPICS</span>
@@ -1707,14 +2071,14 @@
   </section>
 
 
-  <!-- ============================================================
-       SKILLS
-  ============================================================ -->
+  <!-- ==========================================================
+       TECHNICAL SKILLS
+  ========================================================== -->
   <section id="skills">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">05 — Technical Skills</span>
+        <span class="section-tag">04 — Technical Skills</span>
         <div class="section-line"></div>
       </div>
 
@@ -1787,14 +2151,15 @@
   </section>
 
 
-  <!-- ============================================================
-       PERSONAL PROJECTS — click to expand description
-  ============================================================ -->
+  <!-- ==========================================================
+       PERSONAL PROJECTS
+       Click any card to expand its full description.
+  ========================================================== -->
   <section id="projects">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">06 — Personal Projects</span>
+        <span class="section-tag">05 — Personal Projects</span>
         <div class="section-line"></div>
       </div>
 
@@ -1839,19 +2204,20 @@
   </section>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
        LEADERSHIP & OUTREACH
-  ============================================================ -->
+  ========================================================== -->
   <section id="leadership">
     <div class="section-inner">
 
       <div class="section-header reveal">
-        <span class="section-tag">07 — Leadership &amp; Outreach</span>
+        <span class="section-tag">06 — Leadership &amp; Outreach</span>
         <div class="section-line"></div>
       </div>
 
       <div class="leadership-list">
 
+        <!-- Grader / TA -->
         <div class="lead-item reveal">
           <div class="lead-line"></div>
           <div>
@@ -1866,6 +2232,7 @@
           <div class="lead-period">Spring 2026</div>
         </div>
 
+        <!-- SPARKS Ambassador -->
         <div class="lead-item reveal">
           <div class="lead-line"></div>
           <div>
@@ -1880,6 +2247,7 @@
           <div class="lead-period">Spring – Summer 2025</div>
         </div>
 
+        <!-- Community Assistant -->
         <div class="lead-item reveal">
           <div class="lead-line"></div>
           <div>
@@ -1894,6 +2262,7 @@
           <div class="lead-period">Spring 2022 – Spring 2024</div>
         </div>
 
+        <!-- Gold Guide -->
         <div class="lead-item reveal">
           <div class="lead-line"></div>
           <div>
@@ -1913,9 +2282,204 @@
   </section>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
+       GALLERY
+       ─ To use: replace each src="YOUR_PHOTO_XXX.jpg" with your
+         actual filename, e.g. src="jpl-group.jpg"
+       ─ To add more photos: copy a .gallery-item block and paste
+         it anywhere inside .gallery-grid
+       ─ data-cat must match the filter button value:
+         "jpl" | "collins" | "lab" | "campus"
+  ========================================================== -->
+  <section id="gallery">
+    <div class="section-inner">
+
+      <div class="section-header reveal">
+        <span class="section-tag">08 — Photo Gallery</span>
+        <div class="section-line"></div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="gallery-filters reveal">
+        <button class="gallery-filter-btn active" onclick="filterGallery('all', this)">All</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('jpl', this)">NASA JPL</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('collins', this)">Collins Aerospace</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('lab', this)">Projects &amp; Lab</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('campus', this)">Campus &amp; Events</button>
+      </div>
+
+      <div class="gallery-grid">
+
+        <!-- ── NASA JPL ──────────────────────────────────────── -->
+
+        <!-- JPL photo 1 — replace src with your filename, e.g. src="jpl-entrance.jpg" -->
+        <div class="gallery-item reveal" data-cat="jpl">
+          <span class="gallery-cat-dot">NASA JPL</span>
+          <!-- ↓ REPLACE src below with your JPL photo filename -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🏛️</span>
+            <span class="gallery-placeholder-label">Replace with your JPL photo<br/>e.g. src="jpl-entrance.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">NASA Jet Propulsion Laboratory</div>
+            <div class="gallery-caption-sub">JPL Visit · Pasadena, CA</div>
+          </div>
+        </div>
+
+        <!-- JPL photo 2 -->
+        <div class="gallery-item reveal" data-cat="jpl">
+          <span class="gallery-cat-dot">NASA JPL</span>
+          <!-- ↓ REPLACE src below with your JPL photo filename -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🛰️</span>
+            <span class="gallery-placeholder-label">Replace with your JPL photo<br/>e.g. src="jpl-rover-lab.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">JPL Rover Assembly Facility</div>
+            <div class="gallery-caption-sub">NASA JPL · Pasadena, CA</div>
+          </div>
+        </div>
+
+        <!-- JPL photo 3 -->
+        <div class="gallery-item reveal" data-cat="jpl">
+          <span class="gallery-cat-dot">NASA JPL</span>
+          <!-- ↓ REPLACE src below with your JPL photo filename -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🌌</span>
+            <span class="gallery-placeholder-label">Replace with your JPL photo<br/>e.g. src="jpl-group.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Group Photo at JPL</div>
+            <div class="gallery-caption-sub">NASA JPL Visit</div>
+          </div>
+        </div>
+
+        <!-- ── Collins Aerospace ─────────────────────────────── -->
+
+        <!-- Collins photo 1 — me.jpg is already on the experience card; use a different shot here -->
+        <div class="gallery-item reveal" data-cat="collins">
+          <span class="gallery-cat-dot">Collins Aerospace</span>
+          <!-- ↓ REPLACE src below, e.g. src="collins-office.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">✈️</span>
+            <span class="gallery-placeholder-label">Replace with your Collins photo<br/>e.g. src="collins-office.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Systems Engineering at Collins Aerospace</div>
+            <div class="gallery-caption-sub">Cedar Rapids, IA · Summer 2023–2025</div>
+          </div>
+        </div>
+
+        <!-- Collins photo 2 -->
+        <div class="gallery-item reveal" data-cat="collins">
+          <span class="gallery-cat-dot">Collins Aerospace</span>
+          <!-- ↓ REPLACE src below, e.g. src="collins-sim-rig.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🖥️</span>
+            <span class="gallery-placeholder-label">Replace with your Collins photo<br/>e.g. src="collins-sim-rig.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Flight Deck Simulation Rig</div>
+            <div class="gallery-caption-sub">Collins Aerospace · FMS Testing</div>
+          </div>
+        </div>
+
+        <!-- ── Projects & Lab ────────────────────────────────── -->
+
+        <!-- Lab photo 1 -->
+        <div class="gallery-item reveal" data-cat="lab">
+          <span class="gallery-cat-dot">Projects</span>
+          <!-- ↓ REPLACE src below, e.g. src="lab-rover-structure.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🔩</span>
+            <span class="gallery-placeholder-label">Replace with your lab/project photo<br/>e.g. src="lab-rover-structure.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Lunar Rover Structural Build</div>
+            <div class="gallery-caption-sub">NASA RASC-AL · ASU Lab</div>
+          </div>
+        </div>
+
+        <!-- Lab photo 2 -->
+        <div class="gallery-item reveal" data-cat="lab">
+          <span class="gallery-cat-dot">Projects</span>
+          <!-- ↓ REPLACE src below, e.g. src="lab-acoustic-liner.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🔊</span>
+            <span class="gallery-placeholder-label">Replace with your lab/project photo<br/>e.g. src="lab-acoustic-liner.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">APU Acoustic Liner Testing</div>
+            <div class="gallery-caption-sub">Honeywell Research · ASU</div>
+          </div>
+        </div>
+
+        <!-- Lab photo 3 -->
+        <div class="gallery-item reveal" data-cat="lab">
+          <span class="gallery-cat-dot">Projects</span>
+          <!-- ↓ REPLACE src below, e.g. src="lab-shielding-system.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">📷</span>
+            <span class="gallery-placeholder-label">Replace with your lab/project photo<br/>e.g. src="lab-shielding-system.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Infrared Camera Shielding System</div>
+            <div class="gallery-caption-sub">Space Works II · ASU</div>
+          </div>
+        </div>
+
+        <!-- ── Campus & Events ───────────────────────────────── -->
+
+        <!-- Campus photo 1 -->
+        <div class="gallery-item reveal" data-cat="campus">
+          <span class="gallery-cat-dot">Campus</span>
+          <!-- ↓ REPLACE src below, e.g. src="campus-sparks-outreach.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🎓</span>
+            <span class="gallery-placeholder-label">Replace with your campus photo<br/>e.g. src="campus-sparks-outreach.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">SPARKS STEM Outreach</div>
+            <div class="gallery-caption-sub">Access ASU · Spring 2025</div>
+          </div>
+        </div>
+
+        <!-- Campus photo 2 -->
+        <div class="gallery-item reveal" data-cat="campus">
+          <span class="gallery-cat-dot">Campus</span>
+          <!-- ↓ REPLACE src below, e.g. src="campus-ta-session.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">⚡</span>
+            <span class="gallery-placeholder-label">Replace with your campus photo<br/>e.g. src="campus-ta-session.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Teaching Assistant — FSE 100</div>
+            <div class="gallery-caption-sub">Arizona State University · 2026</div>
+          </div>
+        </div>
+
+        <!-- Campus photo 3 -->
+        <div class="gallery-item reveal" data-cat="campus">
+          <span class="gallery-cat-dot">Campus</span>
+          <!-- ↓ REPLACE src below, e.g. src="campus-asu.jpg" -->
+          <div class="gallery-placeholder">
+            <span class="gallery-placeholder-icon">🌵</span>
+            <span class="gallery-placeholder-label">Replace with your campus photo<br/>e.g. src="campus-asu.jpg"</span>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Arizona State University</div>
+            <div class="gallery-caption-sub">Tempe, AZ</div>
+          </div>
+        </div>
+
+      </div><!-- /.gallery-grid -->
+    </div><!-- /.section-inner -->
+  </section>
+
+
+  <!-- ==========================================================
        CONTACT
-  ============================================================ -->
+  ========================================================== -->
   <section id="contact">
     <div class="contact-inner">
       <div class="reveal">
@@ -1931,12 +2495,15 @@
         </p>
 
         <div class="contact-links">
-          <a href="mailto:kaur.harjot.1621@gmail.com" class="contact-link">
-            <span class="icon">✉</span> hkaur33@asu.edu
+
+          <a href="/cdn-cgi/l/email-protection#43282236316d2b2231292c376d7275717203242e222a2f6d202c2e" class="contact-link">
+            <span class="icon">✉</span> <span class="__cf_email__" data-cfemail="e0888b819592d3d3a0819395ce858495">[email&#160;protected]</span>
           </a>
+
           <a href="https://www.linkedin.com/in/harjottkaurr/" target="_blank" class="contact-link">
             <span class="icon">🔗</span> LinkedIn
           </a>
+
         </div>
 
       </div>
@@ -1944,151 +2511,207 @@
   </section>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
        FOOTER
-  ============================================================ -->
+  ========================================================== -->
   <footer>
     <p>© <span class="footer-accent">Harjot Kaur</span> — Aerospace Engineer</p>
     <p>Arizona State University · Tempe, AZ</p>
   </footer>
 
 
-  <!-- ============================================================
+  <!-- ==========================================================
        JAVASCRIPT
-  ============================================================ -->
-  <script>
+  ========================================================== -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
-    /* ── Custom cursor ──
-       Uses left/top positioning (not transform) so it never freezes
-    ── */
+    /* ============================================================
+       JS 1 — CUSTOM CURSOR
+       Dot: snaps to mouse instantly.
+       Ring: lags behind using linear interpolation (lerp at 12%).
+    ============================================================ */
+
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('cursorRing');
-    let mx = -100, my = -100, rx = -100, ry = -100;
 
+    let mx = -100;   /* current mouse X */
+    let my = -100;   /* current mouse Y */
+    let rx = -100;   /* ring X (lerped) */
+    let ry = -100;   /* ring Y (lerped) */
+
+    /* track mouse position */
     document.addEventListener('mousemove', e => {
       mx = e.clientX;
       my = e.clientY;
     });
 
+    /* animation loop */
     function animCursor() {
+
+      /* move dot to exact mouse position */
       cursor.style.left = (mx - 5) + 'px';
       cursor.style.top  = (my - 5) + 'px';
+
+      /* lerp ring toward mouse (12% per frame) */
       rx += (mx - rx) * 0.12;
       ry += (my - ry) * 0.12;
       ring.style.left = (rx - 18) + 'px';
       ring.style.top  = (ry - 18) + 'px';
+
       requestAnimationFrame(animCursor);
+
     }
+
     animCursor();
 
-    /* ring grows when hovering links */
+    /* ring enlarges slightly when hovering links */
     document.querySelectorAll('a, button').forEach(el => {
       el.addEventListener('mouseenter', () => { ring.style.opacity = '0.9'; });
       el.addEventListener('mouseleave', () => { ring.style.opacity = '0.5'; });
     });
 
 
-    /* ── Research card toggle ──
-       Clicking a card adds/removes the "open" class.
-       CSS handles the smooth expand/collapse animation.
-    ── */
+    /* ============================================================
+       JS 2 — RESEARCH CARD TOGGLE
+       Adds/removes class "open". CSS transitions handle the animation.
+    ============================================================ */
+
     function toggleCard(card) {
+
       const isOpen = card.classList.contains('open');
       const hint   = card.querySelector('.research-hint');
 
       if (isOpen) {
+        /* collapse */
         card.classList.remove('open');
         hint.textContent = 'Click to read more';
       } else {
+        /* expand */
         card.classList.add('open');
         hint.textContent = 'Click to collapse';
       }
+
     }
 
 
-    /* ── Project card toggle ──
-       Same pattern as research cards but for project-hint
-    ── */
+    /* ============================================================
+       JS 3 — PROJECT CARD TOGGLE
+       Same pattern as toggleCard but targets .project-hint.
+    ============================================================ */
+
     function toggleProject(card) {
+
       const isOpen = card.classList.contains('open');
       const hint   = card.querySelector('.project-hint');
 
       if (isOpen) {
+        /* collapse */
         card.classList.remove('open');
         hint.textContent = 'Click to read more';
       } else {
+        /* expand */
         card.classList.add('open');
         hint.textContent = 'Click to collapse';
       }
+
     }
 
 
-    /* ── Star field ── */
+    /* ── Gallery filter ──
+       Clicking a filter button shows/hides tiles by data-cat attribute.
+       "all" shows everything.
+    ── */
+    function filterGallery(cat, btn) {
+      /* update active button */
+      document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      /* show / hide tiles */
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+
+    /* ============================================================
+       JS 4 — STAR FIELD
+       Creates 180 randomly placed stars that twinkle via sin().
+    ============================================================ */
+
     const canvas = document.getElementById('stars');
     const ctx    = canvas.getContext('2d');
-    let W, H, stars = [];
 
+    let W, H;
+    let stars = [];
+
+    /* resize canvas to fill window */
     function resize() {
       W = canvas.width  = window.innerWidth;
       H = canvas.height = window.innerHeight;
     }
+
     resize();
     window.addEventListener('resize', resize);
 
-    /* create 180 random stars */
+    /* create 180 stars with random properties */
     for (let i = 0; i < 180; i++) {
       stars.push({
         x:     Math.random() * 2000,
         y:     Math.random() * 1200,
-        r:     Math.random() * 1.2 + 0.2,
-        a:     Math.random(),
-        speed: Math.random() * 0.3 + 0.05
+        r:     Math.random() * 1.2 + 0.2,    /* radius: 0.2 – 1.4 px */
+        a:     Math.random(),                 /* sin phase offset      */
+        speed: Math.random() * 0.3 + 0.05    /* twinkle speed         */
       });
     }
 
+    /* draw loop — animates twinkling using a sin wave */
     function drawStars() {
       ctx.clearRect(0, 0, W, H);
+
       stars.forEach(s => {
+
+        /* advance phase */
         s.a += s.speed * 0.005;
+
+        /* map sin output to opacity range [0.03, 0.21] */
         const opacity = (Math.sin(s.a) + 1) / 2 * 0.18 + 0.03;
+
         ctx.beginPath();
         ctx.arc(s.x % W, s.y % H, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(139, 69, 19, ${opacity})`;
         ctx.fill();
+
       });
+
       requestAnimationFrame(drawStars);
     }
+
     drawStars();
 
 
-    /* ── Scroll reveal ──
-       Show elements already in viewport on page load,
-       then watch the rest as the user scrolls.
-    ── */
+    /* ============================================================
+       JS 5 — SCROLL REVEAL
+       .reveal elements animate in when scrolled into view.
+       Elements already visible on load appear immediately.
+    ============================================================ */
+
     const reveals = document.querySelectorAll('.reveal');
 
+    /* show elements already in viewport on first load */
     reveals.forEach(r => {
       if (r.getBoundingClientRect().top < window.innerHeight) {
         r.classList.add('visible');
       }
     });
 
+    /* observe the rest and trigger as they scroll into view */
     const observer = new IntersectionObserver(entries => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
+          /* stagger each element by 60ms */
           setTimeout(() => entry.target.classList.add('visible'), i * 60);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.05 });
-
-    reveals.forEach(r => {
-      if (!r.classList.contains('visible')) {
-        observer.observe(r);
-      }
-    });
-
-  </script>
-
-</body>
-</html>
+          /* stop watching once triggered
