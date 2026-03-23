@@ -1,132 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AETHER-1 — Mission Control</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AETHER-1 — Mission Control Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
-    /* ── Reset & Base ─────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ============================================================
+       DESIGN SYSTEM
+       Palette: off-white panels, slate-gray chrome, amber alerts,
+       green nominal, red critical — aerospace instrument aesthetic
+    ============================================================ */
     :root {
-      --bg:        #F2F4F7;
-      --surface:   #FFFFFF;
-      --surface2:  #F7F8FA;
-      --border:    #DDE1E9;
-      --border-m:  #BCC3CF;
-      --text-1:    #0F1724;
-      --text-2:    #4A5568;
-      --text-3:    #8896A8;
-      --text-4:    #B0BAC8;
+      --bg:          #f0f2f5;
+      --panel:       #ffffff;
+      --panel2:      #f7f8fa;
+      --chrome:      #e2e5ea;
+      --chrome2:     #cdd0d6;
+      --border:      #d0d4da;
 
-      --nominal:   #0A7A55;
-      --nominal-bg:#E6F5EF;
-      --safe:      #B45309;
-      --safe-bg:   #FEF3C7;
-      --emergency: #B91C1C;
-      --emergency-bg:#FEE2E2;
+      --text:        #1a1d23;
+      --text-muted:  #5a606b;
+      --text-dim:    #8e949f;
+      --label:       #3d4350;
 
-      --green:     #10B981;
-      --green-bg:  #ECFDF5;
-      --amber:     #F59E0B;
-      --amber-bg:  #FFFBEB;
-      --red:       #EF4444;
-      --red-bg:    #FEF2F2;
-      --blue:      #3B82F6;
-      --blue-bg:   #EFF6FF;
-      --purple:    #8B5CF6;
-      --purple-bg: #F5F3FF;
+      --nominal:     #1a9e5c;   /* green   */
+      --nominal-bg:  #edf7f2;
+      --safe:        #d97b10;   /* amber   */
+      --safe-bg:     #fef6ec;
+      --emergency:   #c0392b;   /* red     */
+      --emergency-bg:#fdf0ef;
 
-      --mono: 'IBM Plex Mono', monospace;
-      --sans: 'IBM Plex Sans', sans-serif;
+      --accent:      #2563eb;   /* blue    */
+      --accent-dim:  rgba(37, 99, 235, 0.12);
 
-      --rad-sm: 4px;
-      --rad:    8px;
-      --rad-lg: 12px;
-      --rad-xl: 16px;
+      --warning:     #e59400;
+      --critical:    #dc2626;
+      --caution:     #2563eb;
 
-      --shadow-sm: 0 1px 3px rgba(15,23,36,0.07), 0 1px 2px rgba(15,23,36,0.05);
-      --shadow:    0 4px 12px rgba(15,23,36,0.08), 0 2px 4px rgba(15,23,36,0.04);
+      --bar-good:    #1a9e5c;
+      --bar-warn:    #e59400;
+      --bar-crit:    #dc2626;
     }
 
-    html, body {
-      height: 100%;
-      font-family: var(--sans);
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { font-size: 14px; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
       background: var(--bg);
-      color: var(--text-1);
-      font-size: 13px;
-      line-height: 1.5;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* ── Layout ───────────────────────────────── */
-    .shell {
-      display: grid;
-      grid-template-rows: 52px 1fr;
-      grid-template-columns: 220px 1fr 280px;
-      grid-template-areas:
-        "header header header"
-        "sidebar main   right";
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── Header ───────────────────────────────── */
-    .header {
-      grid-area: header;
-      background: var(--text-1);
+    /* ============================================================
+       TOP NAVIGATION / MISSION HEADER
+    ============================================================ */
+    .mission-header {
+      background: var(--text);
+      color: #ffffff;
+      padding: 0 28px;
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      justify-content: space-between;
+      height: 52px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .mission-id-block {
+      display: flex;
+      align-items: center;
       gap: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #fff;
+    .mission-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 0.15em;
+      color: #ffffff;
     }
 
-    .sat-icon {
-      width: 28px;
-      height: 28px;
-      position: relative;
+    .mission-logo span {
+      color: var(--accent);
     }
 
-    .header-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: 0.05em;
-    }
-
-    .header-sub {
-      font-size: 11px;
-      color: rgba(255,255,255,0.45);
-      font-family: var(--mono);
-      letter-spacing: 0.04em;
-    }
-
-    .header-divider {
+    .mission-divider {
       width: 1px;
       height: 24px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.2);
     }
 
+    .mission-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+    }
+
+    /* mode badge in header */
     .mode-badge {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 11px;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-family: 'Barlow Condensed', sans-serif;
       font-weight: 600;
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
     }
 
     .mode-badge.nominal  { background: var(--nominal-bg);   color: var(--nominal);   }
@@ -134,1141 +132,1771 @@
     .mode-badge.emergency{ background: var(--emergency-bg); color: var(--emergency); }
 
     .mode-dot {
-      width: 7px; height: 7px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: currentColor;
-      animation: pulse-dot 2s infinite;
+      animation: blink 1.4s infinite;
     }
 
-    @keyframes pulse-dot {
+    .nominal  .mode-dot { background: var(--nominal);   }
+    .safe     .mode-dot { background: var(--safe);      animation-duration: 0.7s; }
+    .emergency .mode-dot{ background: var(--emergency); animation-duration: 0.4s; }
+
+    @keyframes blink {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      50%       { opacity: 0.2; }
     }
 
-    .header-clock {
-      margin-left: auto;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.06em;
-    }
-
-    .header-step {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(255,255,255,0.35);
-    }
-
-    /* ── Sidebar ──────────────────────────────── */
-    .sidebar {
-      grid-area: sidebar;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 16px 0;
-    }
-
-    .sidebar-section {
-      padding: 0 14px;
-      margin-bottom: 20px;
-    }
-
-    .sidebar-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-4);
-      margin-bottom: 8px;
-      padding: 0 2px;
-    }
-
-    /* ── Vitals Card ──────────────────────────── */
-    .vital-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--rad);
-      padding: 10px 12px;
-      margin-bottom: 6px;
-      cursor: default;
-      transition: border-color 0.2s;
-    }
-
-    .vital-card:hover { border-color: var(--border-m); }
-
-    .vital-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-
-    .vital-name {
-      font-size: 11px;
-      color: var(--text-3);
-      font-weight: 500;
-    }
-
-    .vital-value {
-      font-family: var(--mono);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-1);
-      transition: color 0.3s;
-    }
-
-    .vital-unit {
-      font-size: 10px;
-      color: var(--text-3);
-      margin-left: 2px;
-    }
-
-    .vital-bar-track {
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
-
-    .vital-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.5s ease, background 0.3s;
-    }
-
-    /* Status Dots ─────────────────────────────── */
-    .status-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 5px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .status-row:last-child { border-bottom: none; }
-
-    .status-label {
-      font-size: 11px;
-      color: var(--text-2);
-    }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .dot.green   { background: var(--green); }
-    .dot.amber   { background: var(--amber); }
-    .dot.red     { background: var(--red); box-shadow: 0 0 0 2px rgba(239,68,68,0.2); }
-    .dot.grey    { background: var(--text-4); }
-    .dot.pulse   { animation: pulse-dot 1.5s infinite; }
-
-    /* ── Main Area ────────────────────────────── */
-    .main {
-      grid-area: main;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* ── Metric Row ───────────────────────────── */
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .metric-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rad-lg);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .metric-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--accent, var(--border));
-      border-radius: var(--rad-lg) var(--rad-lg) 0 0;
-    }
-
-    .metric-card.power    { --accent: var(--amber); }
-    .metric-card.thermal  { --accent: var(--red); }
-    .metric-card.comms    { --accent: var(--blue); }
-    .metric-card.adcs     { --accent: var(--purple); }
-
-    .metric-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 6px;
-    }
-
-    .metric-value {
-      font-family: var(--mono);
-      font-size: 26px;
-      font-weight: 500;
-      color: var(--text-1);
-      line-height: 1;
-      margin-bottom: 4px;
-      transition: color 0.3s;
-    }
-
-    .metric-sub {
-      font-size: 11px;
-      color: var(--text-3);
-    }
-
-    /* ── Charts Row ───────────────────────────── */
-    .charts-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .chart-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rad-lg);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .chart-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .chart-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-2);
-      letter-spacing: 0.02em;
-    }
-
-    .chart-badge {
-      font-size: 10px;
-      font-family: var(--mono);
-      padding: 2px 8px;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      color: var(--text-3);
-    }
-
-    .chart-canvas-wrap {
-      position: relative;
-      height: 110px;
-    }
-
-    /* ── Orbit Card ───────────────────────────── */
-    .orbit-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rad-lg);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .orbit-visual {
+    /* header right cluster */
+    .header-right {
       display: flex;
       align-items: center;
       gap: 20px;
     }
 
-    .orbit-svg-wrap {
-      flex-shrink: 0;
+    .header-stat {
+      text-align: right;
     }
 
-    .orbit-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      flex: 1;
-    }
-
-    .orbit-stat {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--rad);
-      padding: 8px 10px;
-    }
-
-    .orbit-stat-label {
-      font-size: 10px;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .orbit-stat-value {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-1);
-    }
-
-    /* ── Right Panel ──────────────────────────── */
-    .right-panel {
-      grid-area: right;
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .panel-section {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .panel-title {
-      font-size: 10px;
-      font-weight: 600;
+    .header-stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.4);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 10px;
     }
 
-    /* ── Active Faults ────────────────────────── */
-    .fault-list { display: flex; flex-direction: column; gap: 6px; }
-
-    .fault-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: var(--rad);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      animation: fault-in 0.3s ease;
+    .header-stat-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: #ffffff;
     }
 
-    @keyframes fault-in {
-      from { opacity: 0; transform: translateX(8px); }
-      to   { opacity: 1; transform: none; }
-    }
-
-    .fault-item.critical {
-      background: var(--emergency-bg);
-      border-color: #FECACA;
-    }
-
-    .fault-item.warning {
-      background: var(--safe-bg);
-      border-color: #FDE68A;
-    }
-
-    .fault-item.caution {
-      background: var(--blue-bg);
-      border-color: #BFDBFE;
-    }
-
-    .fault-severity {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 1px;
-    }
-
-    .fault-severity.critical { color: var(--red); }
-    .fault-severity.warning  { color: var(--amber); }
-    .fault-severity.caution  { color: var(--blue); }
-
-    .fault-type {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-1);
-      font-family: var(--mono);
-    }
-
-    .fault-desc {
-      font-size: 11px;
-      color: var(--text-2);
-      margin-top: 1px;
-    }
-
-    .fault-sub {
-      font-size: 10px;
-      color: var(--text-3);
-      font-family: var(--mono);
-    }
-
-    .no-faults {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px;
-      background: var(--green-bg);
-      border: 1px solid #A7F3D0;
-      border-radius: var(--rad);
-      font-size: 12px;
-      color: var(--nominal);
-      font-weight: 500;
-    }
-
-    /* ── Event Log ────────────────────────────── */
-    .event-log { display: flex; flex-direction: column; gap: 2px; }
-
-    .event-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 5px 0;
-      border-bottom: 1px solid var(--border);
-      animation: log-in 0.25s ease;
-    }
-
-    @keyframes log-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    .event-step {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--text-4);
-      min-width: 32px;
-      padding-top: 1px;
-    }
-
-    .event-kind {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 3px;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .event-kind.FAULT     { background: var(--emergency-bg); color: var(--red); }
-    .event-kind.RESOLVED  { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.RECOVERY  { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.NOMINAL   { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.ORBIT     { background: var(--blue-bg);      color: var(--blue); }
-    .event-kind.COMMAND   { background: var(--purple-bg);    color: var(--purple); }
-
-    .event-detail {
-      font-size: 11px;
-      color: var(--text-2);
-      line-height: 1.4;
-    }
-
-    /* ── Controls ─────────────────────────────── */
-    .controls { display: flex; flex-direction: column; gap: 6px; }
-
+    /* control buttons */
     .ctrl-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--rad);
-      font-family: var(--sans);
-      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
       font-weight: 500;
-      color: var(--text-2);
+      letter-spacing: 0.08em;
       cursor: pointer;
-      transition: all 0.15s;
-      text-align: left;
+      transition: all 0.2s;
     }
 
     .ctrl-btn:hover {
-      background: var(--surface);
-      border-color: var(--border-m);
-      color: var(--text-1);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .ctrl-btn:active { transform: scale(0.98); }
-
-    .ctrl-btn.primary {
-      background: var(--text-1);
-      border-color: var(--text-1);
-      color: #fff;
-    }
-
-    .ctrl-btn.primary:hover {
-      background: #1E2A3A;
-      border-color: #1E2A3A;
+      background: rgba(255,255,255,0.1);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.4);
     }
 
     .ctrl-btn.danger {
-      color: var(--red);
-      border-color: #FECACA;
-      background: var(--emergency-bg);
+      border-color: rgba(220, 38, 38, 0.5);
+      color: #f87171;
     }
 
-    /* ── Speed Control ────────────────────────── */
+    .ctrl-btn.danger:hover {
+      background: rgba(220, 38, 38, 0.15);
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+
+    /* ============================================================
+       MAIN LAYOUT — 3-column grid
+    ============================================================ */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 260px 1fr 280px;
+      grid-template-rows: auto auto 1fr;
+      gap: 12px;
+      padding: 14px;
+      min-height: calc(100vh - 52px);
+    }
+
+    /* ============================================================
+       ALERT BANNER (spans full width when faults active)
+    ============================================================ */
+    .alert-banner {
+      grid-column: 1 / -1;
+      display: none;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border-left: 4px solid var(--emergency);
+      background: var(--emergency-bg);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--emergency);
+      letter-spacing: 0.06em;
+    }
+
+    .alert-banner.visible {
+      display: flex;
+    }
+
+    .alert-banner.warning {
+      border-color: var(--warning);
+      background: #fffbec;
+      color: #92620a;
+    }
+
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    .alert-faults { flex: 1; }
+
+    .alert-fault-tag {
+      display: inline-block;
+      background: rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      border-radius: 3px;
+      padding: 2px 8px;
+      margin: 2px 4px 2px 0;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+    }
+
+    .alert-banner.warning .alert-fault-tag {
+      background: rgba(229, 148, 0, 0.1);
+      border-color: rgba(229, 148, 0, 0.3);
+    }
+
+
+    /* ============================================================
+       PANEL BASE STYLE
+    ============================================================ */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--chrome);
+      background: var(--panel2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .panel-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .panel-body {
+      padding: 14px 16px;
+    }
+
+
+    /* ============================================================
+       LEFT COLUMN — subsystem telemetry gauges
+    ============================================================ */
+    .left-col {
+      grid-column: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Subsystem row ── */
+    .subsystem {
+      margin-bottom: 14px;
+    }
+
+    .subsystem:last-child {
+      margin-bottom: 0;
+    }
+
+    .subsystem-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subsystem-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--chrome);
+    }
+
+    /* ── Reading row ── */
+    .reading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .reading-name {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      min-width: 90px;
+    }
+
+    .reading-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      text-align: right;
+      min-width: 70px;
+    }
+
+    .reading-value.ok       { color: var(--nominal);   }
+    .reading-value.warn     { color: var(--warning);   }
+    .reading-value.critical { color: var(--critical);  }
+
+    /* ── Progress bar ── */
+    .bar-track {
+      width: 100%;
+      height: 5px;
+      background: var(--chrome);
+      border-radius: 3px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease, background 0.4s ease;
+    }
+
+    /* ── Status pill ── */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      border: 1px solid;
+    }
+
+    .status-pill.on, .status-pill.nominal {
+      color: var(--nominal);
+      background: var(--nominal-bg);
+      border-color: rgba(26,158,92,0.3);
+    }
+
+    .status-pill.off, .status-pill.inactive {
+      color: var(--text-dim);
+      background: var(--panel2);
+      border-color: var(--chrome);
+    }
+
+    .status-pill.warn {
+      color: var(--warning);
+      background: #fffbec;
+      border-color: rgba(229,148,0,0.3);
+    }
+
+    .status-pill.crit {
+      color: var(--critical);
+      background: var(--emergency-bg);
+      border-color: rgba(220,38,38,0.3);
+    }
+
+    .pill-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── Orbit ring ── */
+    .orbit-ring-container {
+      display: flex;
+      justify-content: center;
+      margin: 6px 0 12px;
+    }
+
+    .orbit-svg { overflow: visible; }
+
+
+    /* ============================================================
+       CENTRE COLUMN — charts
+    ============================================================ */
+    .centre-col {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Mini stat cards row ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .stat-card-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .stat-card-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.6rem;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .stat-card-unit {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* ── Chart canvas ── */
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .chart-canvas {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 18px;
+      padding: 6px 0 2px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+
+    /* ============================================================
+       RIGHT COLUMN — event log + commands
+    ============================================================ */
+    .right-col {
+      grid-column: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Event log ── */
+    .event-log {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 14px;
+      max-height: 340px;
+    }
+
+    .event-entry {
+      display: grid;
+      grid-template-columns: 44px 62px 1fr;
+      gap: 6px;
+      align-items: start;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--chrome);
+      font-size: 0.75rem;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .event-entry:last-child { border-bottom: none; }
+
+    .event-step {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .event-kind {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      padding: 1px 6px;
+      border-radius: 3px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .event-kind.FAULT    { background: var(--emergency-bg); color: var(--emergency); }
+    .event-kind.RESOLVED { background: var(--nominal-bg);   color: var(--nominal);   }
+    .event-kind.NOMINAL  { background: var(--nominal-bg);   color: var(--nominal);   }
+    .event-kind.RECOVERY { background: #eef4ff;             color: var(--accent);    }
+    .event-kind.COMMAND  { background: #f5f0ff;             color: #6d28d9;          }
+    .event-kind.ORBIT    { background: #f0f9ff;             color: #0369a1;          }
+
+    .event-detail {
+      color: var(--text-muted);
+      font-size: 0.73rem;
+    }
+
+    /* ── Command panel ── */
+    .cmd-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 12px 14px;
+    }
+
+    .cmd-btn {
+      padding: 8px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--label);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .cmd-btn:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cmd-btn.danger:hover {
+      background: var(--emergency-bg);
+      border-color: var(--emergency);
+      color: var(--emergency);
+    }
+
+    .cmd-btn.full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Active faults list ── */
+    .fault-list {
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 40px;
+    }
+
+    .fault-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: 4px;
+      background: var(--panel2);
+      border: 1px solid var(--chrome);
+      font-size: 0.75rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .fault-type {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+    }
+
+    .fault-sev {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    .sev-CRITICAL { background: var(--emergency-bg); color: var(--emergency); }
+    .sev-WARNING  { background: #fffbec;             color: var(--warning);   }
+    .sev-CAUTION  { background: #eef4ff;             color: var(--accent);    }
+
+    .no-faults {
+      font-size: 0.75rem;
+      color: var(--nominal);
+      font-family: 'Share Tech Mono', monospace;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    /* ── Simulation speed ── */
     .speed-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--chrome);
     }
 
-    .speed-label { font-size: 11px; color: var(--text-3); min-width: 50px; }
-
-    .speed-btns { display: flex; gap: 4px; }
+    .speed-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
 
     .speed-btn {
-      padding: 3px 10px;
-      font-size: 11px;
-      font-family: var(--mono);
+      padding: 4px 10px;
+      border-radius: 3px;
       border: 1px solid var(--border);
-      border-radius: var(--rad-sm);
-      background: transparent;
-      color: var(--text-3);
+      background: var(--panel2);
+      color: var(--label);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.2s;
     }
 
-    .speed-btn:hover { border-color: var(--border-m); color: var(--text-1); }
-    .speed-btn.active { background: var(--text-1); border-color: var(--text-1); color: #fff; }
+    .speed-btn.active, .speed-btn:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
 
-    /* ── Paused Overlay ───────────────────────── */
-    .paused-banner {
-      display: none;
-      align-items: center;
+    /* ── Orbit info row ── */
+    .orbit-info-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      padding: 6px 16px;
-      background: var(--safe-bg);
-      border-bottom: 1px solid #FDE68A;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--safe);
-      grid-column: 1 / -1;
+      padding: 10px 14px;
     }
 
-    .paused-banner.visible { display: flex; }
+    .orbit-stat {
+      text-align: center;
+    }
 
-    /* ── Scrollbar ────────────────────────────── */
+    .orbit-stat-val {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .orbit-stat-label {
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Footer bar ── */
+    .footer-bar {
+      grid-column: 1 / -1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-dim);
+    }
+
+    .footer-bar span { letter-spacing: 0.06em; }
+
+    /* scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--border-m); }
+    ::-webkit-scrollbar-thumb { background: var(--chrome2); border-radius: 2px; }
 
-    /* ── Connection error ─────────────────────── */
-    .conn-error {
-      display: none;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: var(--emergency-bg);
-      border: 1px solid #FECACA;
-      border-radius: 100px;
-      font-size: 11px;
-      color: var(--red);
-      font-weight: 500;
-    }
-
-    .conn-error.visible { display: flex; }
-
-    /* Responsive adjustments */
-    @media (max-width: 1100px) {
-      .shell {
-        grid-template-columns: 190px 1fr 240px;
-      }
-      .metric-row {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
   </style>
 </head>
 <body>
 
-<div class="shell">
+  <!-- ============================================================
+       MISSION HEADER
+  ============================================================ -->
+  <header class="mission-header">
 
-  <!-- ── Header ─────────────────────────────── -->
-  <header class="header">
-    <div class="header-logo">
-      <svg class="sat-icon" viewBox="0 0 28 28" fill="none">
-        <rect x="11" y="8" width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.9)"/>
-        <rect x="2"  y="12" width="8" height="4"  rx="1"   fill="rgba(255,255,255,0.6)"/>
-        <rect x="18" y="12" width="8" height="4"  rx="1"   fill="rgba(255,255,255,0.6)"/>
-        <circle cx="14" cy="14" r="2" fill="rgba(255,255,255,0.4)"/>
-        <line x1="14" y1="3"  x2="14" y2="7"  stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="14" y1="21" x2="14" y2="25" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div>
-        <div class="header-title">AETHER-1</div>
-        <div class="header-sub">MX-2024-001 · LEO 550 km</div>
+    <div class="mission-id-block">
+      <div class="mission-logo">AETHER<span>-1</span></div>
+      <div class="mission-divider"></div>
+      <div class="mission-sub">AX-2024-001 · LEO 550 km · 437.1 MHz</div>
+    </div>
+
+    <div id="modeBadge" class="mode-badge nominal">
+      <span class="mode-dot"></span>
+      <span id="modeText">NOMINAL</span>
+    </div>
+
+    <div class="header-right">
+      <div class="header-stat">
+        <div class="header-stat-label">MET</div>
+        <div class="header-stat-value" id="metClock">T+00:00:00</div>
       </div>
+      <div class="header-stat">
+        <div class="header-stat-label">Step</div>
+        <div class="header-stat-value" id="stepCount">0000</div>
+      </div>
+      <div class="header-stat">
+        <div class="header-stat-label">Orbit</div>
+        <div class="header-stat-value" id="orbitNum">#1</div>
+      </div>
+      <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
+      <button class="ctrl-btn danger" onclick="resetSim()">↺ Reset</button>
     </div>
 
-    <div class="header-divider"></div>
-
-    <div class="mode-badge nominal" id="mode-badge">
-      <div class="mode-dot"></div>
-      <span id="mode-text">NOMINAL</span>
-    </div>
-
-    <div class="conn-error" id="conn-error">
-      <div class="dot red pulse"></div>
-      NO TELEMETRY
-    </div>
-
-    <div class="header-clock" id="clock">--:--:-- UTC</div>
-    <div class="header-step" id="step-label">STEP —</div>
   </header>
 
-  <!-- ── Sidebar ─────────────────────────────── -->
-  <aside class="sidebar">
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Power · EPS</div>
-      <div class="vital-card">
-        <div class="vital-row">
-          <span class="vital-name">Battery</span>
-          <span><span class="vital-value" id="sb-battery">—</span><span class="vital-unit">%</span></span>
-        </div>
-        <div class="vital-bar-track">
-          <div class="vital-bar-fill" id="sb-battery-bar" style="width:0%;background:var(--green)"></div>
-        </div>
-      </div>
-      <div class="vital-card">
-        <div class="vital-row">
-          <span class="vital-name">Power Draw</span>
-          <span><span class="vital-value" id="sb-power">—</span><span class="vital-unit">W</span></span>
-        </div>
-      </div>
+  <!-- ============================================================
+       DASHBOARD GRID
+  ============================================================ -->
+  <main class="dashboard">
+
+    <!-- Alert banner (hidden until faults) -->
+    <div class="alert-banner" id="alertBanner">
+      <span class="alert-icon">⚠</span>
+      <div class="alert-faults" id="alertFaults"></div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Thermal</div>
-      <div class="vital-card">
-        <div class="vital-row">
-          <span class="vital-name">Temperature</span>
-          <span><span class="vital-value" id="sb-temp">—</span><span class="vital-unit">°C</span></span>
-        </div>
-        <div class="vital-bar-track">
-          <div class="vital-bar-fill" id="sb-temp-bar" style="width:0%;background:var(--blue)"></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Subsystem Status</div>
-      <div class="vital-card" style="padding: 8px 12px;">
-        <div class="status-row">
-          <span class="status-label">EPS</span>
-          <div class="status-indicator" id="st-eps">
-            <div class="dot green"></div><span>Nominal</span>
-          </div>
-        </div>
-        <div class="status-row">
-          <span class="status-label">Thermal</span>
-          <div class="status-indicator" id="st-thermal">
-            <div class="dot green"></div><span>Nominal</span>
-          </div>
-        </div>
-        <div class="status-row">
-          <span class="status-label">ADCS</span>
-          <div class="status-indicator" id="st-adcs">
-            <div class="dot green"></div><span>Nominal</span>
-          </div>
-        </div>
-        <div class="status-row">
-          <span class="status-label">Comms</span>
-          <div class="status-indicator" id="st-comms">
-            <div class="dot green"></div><span>Nominal</span>
-          </div>
-        </div>
-        <div class="status-row">
-          <span class="status-label">Payload</span>
-          <div class="status-indicator" id="st-payload">
-            <div class="dot green"></div><span>Active</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- ── LEFT COLUMN — Subsystem panels ── -->
+    <div class="left-col">
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Orbit</div>
-      <div class="vital-card" style="padding: 8px 12px;">
-        <div class="status-row">
-          <span class="status-label">Orbit #</span>
-          <span class="status-indicator" style="font-family:var(--mono);font-size:12px" id="sb-orbit">—</span>
+      <!-- Power panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">⚡ EPS — Electrical Power</span>
+          <span class="panel-badge" id="epsBadge">NOMINAL</span>
         </div>
-        <div class="status-row">
-          <span class="status-label">Sunlight</span>
-          <div class="status-indicator" id="st-sun">
-            <div class="dot green"></div><span>Illuminated</span>
-          </div>
-        </div>
-        <div class="status-row">
-          <span class="status-label">Ground Cxn</span>
-          <div class="status-indicator" id="st-ground">
-            <div class="dot green"></div><span>Acquired</span>
-          </div>
-        </div>
-      </div>
-    </div>
+        <div class="panel-body">
 
-  </aside>
-
-  <!-- ── Main ────────────────────────────────── -->
-  <main class="main">
-
-    <!-- Metric Row -->
-    <div class="metric-row">
-      <div class="metric-card power">
-        <div class="metric-label">Battery SOC</div>
-        <div class="metric-value" id="m-battery">—<span style="font-size:16px">%</span></div>
-        <div class="metric-sub" id="m-solar-status">Solar charging active</div>
-      </div>
-      <div class="metric-card thermal">
-        <div class="metric-label">Temperature</div>
-        <div class="metric-value" id="m-temp">—<span style="font-size:16px">°C</span></div>
-        <div class="metric-sub" id="m-heater-status">Heater off</div>
-      </div>
-      <div class="metric-card comms">
-        <div class="metric-label">Link Quality</div>
-        <div class="metric-value" id="m-link">—<span style="font-size:16px">%</span></div>
-        <div class="metric-sub" id="m-packets">↑0 ↓0 packets</div>
-      </div>
-      <div class="metric-card adcs">
-        <div class="metric-label">Pointing Error</div>
-        <div class="metric-value" id="m-point">—<span style="font-size:14px">°</span></div>
-        <div class="metric-sub" id="m-adcs-status">Attitude stable</div>
-      </div>
-    </div>
-
-    <!-- Charts -->
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">Battery State of Charge</span>
-          <span class="chart-badge" id="chart-bat-latest">—%</span>
-        </div>
-        <div class="chart-canvas-wrap">
-          <canvas id="chart-battery"></canvas>
-        </div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">Spacecraft Temperature</span>
-          <span class="chart-badge" id="chart-temp-latest">— °C</span>
-        </div>
-        <div class="chart-canvas-wrap">
-          <canvas id="chart-temp"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Orbit + Link -->
-    <div class="charts-row">
-      <div class="orbit-card">
-        <div class="chart-header">
-          <span class="chart-title">Orbital Position</span>
-          <span class="chart-badge" id="orbit-alt">550 km LEO</span>
-        </div>
-        <div class="orbit-visual">
-          <div class="orbit-svg-wrap">
-            <svg width="120" height="120" viewBox="0 0 120 120">
-              <!-- Earth -->
-              <circle cx="60" cy="60" r="22" fill="#1D4ED8" opacity="0.15"/>
-              <circle cx="60" cy="60" r="22" fill="none" stroke="#1D4ED8" stroke-width="1" opacity="0.4"/>
-              <text x="60" y="64" text-anchor="middle" font-size="9" fill="#1D4ED8" opacity="0.8" font-family="IBM Plex Sans,sans-serif">Earth</text>
-              <!-- Orbit path -->
-              <circle cx="60" cy="60" r="44" fill="none" stroke="#BCC3CF" stroke-width="1" stroke-dasharray="3 3"/>
-              <!-- Shadow arc (eclipse zone) -->
-              <path id="shadow-arc" d="" fill="rgba(30,42,58,0.1)"/>
-              <!-- Satellite -->
-              <g id="sat-pos">
-                <circle r="5" fill="#0F1724"/>
-                <rect x="-8" y="-2" width="4" height="4" rx="0.5" fill="#0F1724" opacity="0.6"/>
-                <rect x="4"  y="-2" width="4" height="4" rx="0.5" fill="#0F1724" opacity="0.6"/>
-              </g>
-            </svg>
-          </div>
-          <div class="orbit-stats">
-            <div class="orbit-stat">
-              <div class="orbit-stat-label">Altitude</div>
-              <div class="orbit-stat-value">550 km</div>
+          <div class="subsystem">
+            <div class="reading">
+              <span class="reading-name">Battery</span>
+              <span class="reading-value" id="battVal">85.0%</span>
             </div>
-            <div class="orbit-stat">
-              <div class="orbit-stat-label">Period</div>
-              <div class="orbit-stat-value">48 min</div>
+            <div class="bar-track">
+              <div class="bar-fill" id="battBar" style="width:85%; background:var(--bar-good)"></div>
             </div>
-            <div class="orbit-stat">
-              <div class="orbit-stat-label">Orbit #</div>
-              <div class="orbit-stat-value" id="orb-num">—</div>
+
+            <div class="reading">
+              <span class="reading-name">Power Draw</span>
+              <span class="reading-value" id="powerVal">—</span>
             </div>
-            <div class="orbit-stat">
-              <div class="orbit-stat-label">Eclipse</div>
-              <div class="orbit-stat-value" id="orb-eclipse">—</div>
+
+            <div class="reading">
+              <span class="reading-name">Solar Array</span>
+              <span id="solarPill" class="status-pill nominal"><span class="pill-dot"></span>CHARGING</span>
             </div>
           </div>
+
         </div>
       </div>
 
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">Downlink Quality</span>
-          <span class="chart-badge" id="chart-link-latest">—%</span>
+      <!-- Thermal panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🌡 THERMAL — Temperature</span>
+          <span class="panel-badge" id="thermalBadge">NOMINAL</span>
         </div>
-        <div class="chart-canvas-wrap">
-          <canvas id="chart-link"></canvas>
+        <div class="panel-body">
+
+          <div class="subsystem">
+            <div class="reading">
+              <span class="reading-name">Temperature</span>
+              <span class="reading-value" id="tempVal">22.0 °C</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="tempBar" style="width:52%; background:var(--bar-good)"></div>
+            </div>
+
+            <div class="reading">
+              <span class="reading-name">Heater</span>
+              <span id="heaterPill" class="status-pill inactive"><span class="pill-dot"></span>OFF</span>
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <!-- ADCS panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🎯 ADCS — Attitude</span>
+          <span class="panel-badge" id="adcsBadge">STABLE</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="subsystem">
+            <div class="reading">
+              <span class="reading-name">Pointing Error</span>
+              <span class="reading-value" id="pointVal">0.30°</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="pointBar" style="width:6%; background:var(--bar-good)"></div>
+            </div>
+
+            <div class="reading">
+              <span class="reading-name">Attitude</span>
+              <span id="attitudePill" class="status-pill nominal"><span class="pill-dot"></span>STABLE</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Comms panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">📡 COMMS — Downlink</span>
+          <span class="panel-badge" id="commsBadge">IN CONTACT</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="subsystem">
+            <div class="reading">
+              <span class="reading-name">Link Quality</span>
+              <span class="reading-value" id="linkVal">92.0%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="linkBar" style="width:92%; background:var(--bar-good)"></div>
+            </div>
+
+            <div class="reading">
+              <span class="reading-name">Ground Contact</span>
+              <span id="contactPill" class="status-pill nominal"><span class="pill-dot"></span>ACTIVE</span>
+            </div>
+
+            <div class="reading">
+              <span class="reading-name">Pkts ↓ / ↑</span>
+              <span class="reading-value" id="pktVal">0 / 0</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Orbit + payload -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🛰 ORBIT &amp; PAYLOAD</span>
+        </div>
+
+        <!-- Orbit ring SVG -->
+        <div class="orbit-ring-container">
+          <svg class="orbit-svg" width="120" height="120" viewBox="-60 -60 120 120">
+            <!-- orbit path -->
+            <ellipse cx="0" cy="0" rx="50" ry="50"
+              fill="none" stroke="#e2e5ea" stroke-width="1.5"/>
+            <!-- sunlit arc (green) drawn by JS -->
+            <path id="sunArc"  fill="none" stroke="#1a9e5c" stroke-width="3" stroke-linecap="round"/>
+            <!-- eclipse arc (dark) -->
+            <path id="eclArc"  fill="none" stroke="#1a1d23" stroke-width="3" stroke-linecap="round"/>
+            <!-- spacecraft dot -->
+            <circle id="scDot" cx="0" cy="-50" r="5" fill="#2563eb"/>
+            <!-- Earth -->
+            <circle cx="0" cy="0" r="12" fill="#2563eb" opacity="0.15"/>
+            <circle cx="0" cy="0" r="12" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.4"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10" fill="#2563eb" opacity="0.6">🌍</text>
+          </svg>
+        </div>
+
+        <div class="orbit-info-row">
+          <div class="orbit-stat">
+            <div class="orbit-stat-val" id="orbitNumL">1</div>
+            <div class="orbit-stat-label">Orbit #</div>
+          </div>
+          <div class="orbit-stat">
+            <div class="orbit-stat-val" id="orbitPhase">0%</div>
+            <div class="orbit-stat-label">Phase</div>
+          </div>
+          <div class="orbit-stat">
+            <div class="orbit-stat-val" id="sunlightState">☀️</div>
+            <div class="orbit-stat-label">Illumin.</div>
+          </div>
+        </div>
+
+        <div class="panel-body" style="padding-top:0">
+          <div class="reading">
+            <span class="reading-name">Payload</span>
+            <span id="payloadPill" class="status-pill on"><span class="pill-dot"></span>ACTIVE</span>
+          </div>
+          <div class="reading">
+            <span class="reading-name">Eclipse dur.</span>
+            <span class="reading-value" id="eclipseVal">0 steps</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /left-col -->
+
+
+    <!-- ── CENTRE COLUMN — charts ── -->
+    <div class="centre-col">
+
+      <!-- 4 stat cards -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-card-label">Battery</div>
+          <div class="stat-card-value" id="bigBatt">85.0</div>
+          <div class="stat-card-unit">% remaining</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Temperature</div>
+          <div class="stat-card-value" id="bigTemp">22.0</div>
+          <div class="stat-card-unit">°C internal</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Link Quality</div>
+          <div class="stat-card-value" id="bigLink">92.0</div>
+          <div class="stat-card-unit">% downlink</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Faults</div>
+          <div class="stat-card-value" id="bigFaults">0</div>
+          <div class="stat-card-unit">since reset</div>
+        </div>
+      </div>
+
+      <!-- Battery + Temp chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Telemetry History — Battery &amp; Temperature</span>
+          <span class="panel-badge">Last 60 steps</span>
+        </div>
+        <div class="panel-body">
+          <div class="chart-wrap">
+            <canvas class="chart-canvas" id="battTempChart" height="140"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#1a9e5c"></div>
+              Battery %
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#e59400"></div>
+              Temperature °C (scaled)
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#dc2626; opacity:0.4"></div>
+              Fault thresholds
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link quality chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Comms — Link Quality &amp; Pointing Error</span>
+          <span class="panel-badge">Last 60 steps</span>
+        </div>
+        <div class="panel-body">
+          <div class="chart-wrap">
+            <canvas class="chart-canvas" id="commsChart" height="120"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#2563eb"></div>
+              Link Quality %
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#9333ea"></div>
+              Pointing Error ° ×20
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /centre-col -->
+
+
+    <!-- ── RIGHT COLUMN — log + commands ── -->
+    <div class="right-col">
+
+      <!-- Active faults -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Active Faults</span>
+          <span class="panel-badge" id="faultCount">0 active</span>
+        </div>
+        <div class="fault-list" id="faultList">
+          <div class="no-faults">✓ No active faults</div>
+        </div>
+      </div>
+
+      <!-- Event log -->
+      <div class="panel" style="flex:1">
+        <div class="panel-header">
+          <span class="panel-title">Event Log</span>
+          <span class="panel-badge">Rolling 100</span>
+        </div>
+        <div class="event-log" id="eventLog">
+          <div class="event-entry">
+            <span class="event-step">0000</span>
+            <span class="event-kind NOMINAL">NOMINAL</span>
+            <span class="event-detail">Simulation initialised</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manual commands -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Ground Commands</span>
+        </div>
+        <div class="cmd-grid">
+          <button class="cmd-btn" onclick="sendCmd('PAYLOAD_ON')">Payload ON</button>
+          <button class="cmd-btn danger" onclick="sendCmd('PAYLOAD_OFF')">Payload OFF</button>
+          <button class="cmd-btn" onclick="sendCmd('ENABLE_HEATER')">Heater ON</button>
+          <button class="cmd-btn" onclick="sendCmd('DISABLE_HEATER')">Heater OFF</button>
+          <button class="cmd-btn" onclick="sendCmd('ENABLE_CHARGING')">Force Charge</button>
+          <button class="cmd-btn" onclick="sendCmd('STABILISE_ATTITUDE')">Stabilise</button>
+          <button class="cmd-btn" onclick="sendCmd('ENTER_SAFE_MODE')">Safe Mode</button>
+          <button class="cmd-btn danger" onclick="sendCmd('REDUCE_THERMAL_LOAD')">Cool Down</button>
+        </div>
+
+        <!-- Simulation speed -->
+        <div class="speed-row">
+          <span class="speed-label">Speed</span>
+          <button class="speed-btn" onclick="setSpeed(2000)">0.5×</button>
+          <button class="speed-btn active" id="spd1x" onclick="setSpeed(1000)">1×</button>
+          <button class="speed-btn" onclick="setSpeed(500)">2×</button>
+          <button class="speed-btn" onclick="setSpeed(200)">5×</button>
+        </div>
+      </div>
+
+    </div><!-- /right-col -->
+
+
+    <!-- Footer -->
+    <div class="footer-bar">
+      <span>AETHER-1 · Mission Simulation v1.0 · JS Engine (no backend required)</span>
+      <span>Uptime: <span id="uptimeVal">0</span> steps · Total faults detected: <span id="totalFaultsFoot">0</span></span>
+      <span>437.1 MHz · LEO 550 km · DO-178B ref. architecture</span>
     </div>
 
   </main>
 
-  <!-- ── Right Panel ─────────────────────────── -->
-  <aside class="right-panel">
 
-    <div class="panel-section">
-      <div class="panel-title">Active Faults</div>
-      <div class="fault-list" id="fault-list">
-        <div class="no-faults">
-          <div class="dot green"></div>
-          All systems nominal
-        </div>
-      </div>
-    </div>
+  <!-- ============================================================
+       JAVASCRIPT — Complete simulation engine
+       Mirrors Python logic from:
+         spacecraft.py · lifecycle.py · fdir.py
+         config.py · schedular.py
+  ============================================================ */
+  <script>
 
-    <div class="panel-section" style="flex:1; overflow-y:auto;">
-      <div class="panel-title">Event Log</div>
-      <div class="event-log" id="event-log"></div>
-    </div>
+    /* ── CONFIG (from config.py) ─────────────────────────── */
+    const CFG = {
+      SATELLITE_NAME: 'AETHER-1',
+      MISSION_ID: 'AX-2024-001',
+      ORBIT_ALTITUDE_KM: 550,
 
-    <div class="panel-section">
-      <div class="panel-title">Ground Commands</div>
-      <div class="controls">
-        <button class="ctrl-btn" onclick="sendCmd('PAYLOAD_ON')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Enable Payload
-        </button>
-        <button class="ctrl-btn" onclick="sendCmd('PAYLOAD_OFF')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M4 4l4 4M8 4l-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Disable Payload
-        </button>
-        <button class="ctrl-btn" onclick="sendCmd('ENABLE_HEATER')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M3 4l3-3 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Enable Heater
-        </button>
-        <button class="ctrl-btn" onclick="sendCmd('STABILISE_ATTITUDE')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>
-          Stabilise Attitude
-        </button>
-        <button class="ctrl-btn danger" onclick="sendCmd('ENTER_SAFE_MODE')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L1 4v3c0 2.2 2.1 4.2 5 4.8 2.9-.6 5-2.6 5-4.8V4L6 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-          Force Safe Mode
-        </button>
-      </div>
+      BATTERY_MAX: 100,
+      BATTERY_MIN: 0,
+      BATTERY_CAPACITY_WH: 20,
 
-      <div class="speed-row">
-        <span class="speed-label">Sim speed</span>
-        <div class="speed-btns">
-          <button class="speed-btn" onclick="setSpeed(3000)">0.3×</button>
-          <button class="speed-btn active" id="spd-1" onclick="setSpeed(1500)">1×</button>
-          <button class="speed-btn" onclick="setSpeed(500)">3×</button>
-          <button class="speed-btn" onclick="setSpeed(0)">⏸</button>
-        </div>
-      </div>
-    </div>
+      POWER_LOW_THRESHOLD:      20,
+      POWER_CRITICAL_THRESHOLD: 10,
+      POWER_RECOVER_THRESHOLD:  40,
 
-  </aside>
+      SOLAR_CHARGE_RATE:  1.8,
+      PAYLOAD_DRAIN_RATE: 2.0,
+      IDLE_DRAIN_RATE:    0.4,
 
-</div>
+      TEMP_MAX: 80,
+      TEMP_MIN: -20,
+      TEMP_FAULT_HIGH:    50,
+      TEMP_FAULT_LOW:    -15,
+      TEMP_RECOVER_HIGH:  40,
+      TEMP_RECOVER_LOW:   -5,
+      TEMP_SUNLIGHT_GAIN:  2.0,
+      TEMP_SHADOW_LOSS:    1.5,
+      TEMP_PAYLOAD_GAIN:   1.5,
 
-<!-- Chart.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-// ── State ──────────────────────────────────────────────────────────────────
-const API = "http://127.0.0.1:8000";
-let simInterval = null;
-let simSpeed = 1500;
-let isPaused = false;
-let lastStep = 0;
+      ORBIT_PERIOD_STEPS: 48,
+      SUNLIGHT_FRACTION:  0.65,
+    };
 
-// ── Clock ──────────────────────────────────────────────────────────────────
-function tickClock() {
-  const now = new Date();
-  const h = String(now.getUTCHours()).padStart(2,'0');
-  const m = String(now.getUTCMinutes()).padStart(2,'0');
-  const s = String(now.getUTCSeconds()).padStart(2,'0');
-  document.getElementById('clock').textContent = `${h}:${m}:${s} UTC`;
-}
-setInterval(tickClock, 1000);
-tickClock();
+    /* ── FAULT DEFINITIONS (from fdir.py) ───────────────── */
+    const FAULT_DEFS = {
+      LOW_BATTERY:      { subsystem:'EPS',     severity:'WARNING',  desc:'Battery below minimum threshold' },
+      CRITICAL_BATTERY: { subsystem:'EPS',     severity:'CRITICAL', desc:'Battery critically low' },
+      HIGH_TEMP:        { subsystem:'THERMAL', severity:'WARNING',  desc:'Temperature above operating limit' },
+      LOW_TEMP:         { subsystem:'THERMAL', severity:'WARNING',  desc:'Temperature below safe range' },
+      ATTITUDE_FAULT:   { subsystem:'ADCS',    severity:'WARNING',  desc:'Pointing error exceeds 1.5°' },
+      COMMS_DEGRADED:   { subsystem:'COMMS',   severity:'CAUTION',  desc:'Downlink quality below threshold' },
+    };
 
-// ── Charts ─────────────────────────────────────────────────────────────────
-function makeChart(id, color, yMin, yMax, label) {
-  const ctx = document.getElementById(id).getContext('2d');
-  return new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        data: [],
-        borderColor: color,
-        borderWidth: 1.5,
-        pointRadius: 0,
-        fill: true,
-        backgroundColor: color + '18',
-        tension: 0.35,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 200 },
-      plugins: { legend: { display: false }, tooltip: {
-        callbacks: { label: (c) => `${c.parsed.y.toFixed(1)} ${label}` }
-      }},
-      scales: {
-        x: {
-          display: false,
-          ticks: { display: false },
-          grid: { display: false }
-        },
-        y: {
-          min: yMin,
-          max: yMax,
-          ticks: {
-            font: { family: 'IBM Plex Mono', size: 10 },
-            color: '#8896A8',
-            maxTicksLimit: 4,
-          },
-          grid: { color: '#DDE1E9', lineWidth: 0.5 }
+    /* ── SPACECRAFT STATE (from spacecraft.py) ───────────── */
+    function makeSC() {
+      return {
+        mode: 'NOMINAL',
+        battery: 85,
+        solarArrayActive: true,
+        powerDrawW: 0,
+        temperature: 22,
+        heaterOn: false,
+        payloadOn: true,
+        payloadDutyCycle: 1.0,
+        attitudeStable: true,
+        pointingErrorDeg: 0.3,
+        inGroundContact: true,
+        commsAvailable: true,
+        linkQuality: 92,
+        uplinkPackets: 0,
+        downlinkPackets: 0,
+        orbitStep: 0,
+        inSunlight: true,
+        eclipseDuration: 0,
+        orbitNumber: 1,
+        activeFaults: new Set(),
+        preFaultPayloadState: null,
+        history: { battery:[], temperature:[], linkQuality:[], pointingError:[] },
+        totalSteps: 0,
+        totalFaults: 0,
+        uptimeSteps: 0,
+      };
+    }
+
+    /* ── ORBIT (from spacecraft.py → update_orbit) ────── */
+    function updateOrbit(sc) {
+      sc.orbitStep = (sc.orbitStep + 1) % CFG.ORBIT_PERIOD_STEPS;
+      const phase = sc.orbitStep / CFG.ORBIT_PERIOD_STEPS;
+      const prevSun = sc.inSunlight;
+
+      sc.inSunlight = phase < CFG.SUNLIGHT_FRACTION;
+
+      if (!sc.inSunlight) {
+        sc.eclipseDuration += 1;
+      } else {
+        sc.eclipseDuration = 0;
+      }
+
+      if (sc.orbitStep === 0) sc.orbitNumber += 1;
+
+      sc.inGroundContact = phase < 0.20 || (phase > 0.55 && phase < 0.65);
+
+      return prevSun !== sc.inSunlight;   /* true if day/night transition */
+    }
+
+    /* ── LIFECYCLE (from lifecycle.py → update) ─────────── */
+    function lifecycleUpdate(sc) {
+      sc.totalSteps += 1;
+      if (sc.mode === 'NOMINAL') sc.uptimeSteps += 1;
+
+      const transition = updateOrbit(sc);
+
+      /* Power model */
+      let drain = CFG.IDLE_DRAIN_RATE;
+      if (sc.payloadOn) drain += CFG.PAYLOAD_DRAIN_RATE * sc.payloadDutyCycle;
+      if (sc.heaterOn)  drain += 0.3;
+
+      let solar = 0;
+      if (sc.inSunlight && sc.solarArrayActive) {
+        solar = CFG.SOLAR_CHARGE_RATE;
+        if (transition) solar *= 0.5;
+      }
+
+      sc.battery = Math.max(CFG.BATTERY_MIN,
+                   Math.min(CFG.BATTERY_MAX, sc.battery + solar - drain));
+
+      sc.powerDrawW = drain * (CFG.BATTERY_CAPACITY_WH / 100) * 60;
+
+      /* Thermal model */
+      if (sc.inSunlight) {
+        sc.temperature += CFG.TEMP_SUNLIGHT_GAIN;
+        if (sc.payloadOn) sc.temperature += CFG.TEMP_PAYLOAD_GAIN * sc.payloadDutyCycle;
+      } else {
+        sc.temperature -= CFG.TEMP_SHADOW_LOSS;
+        if (sc.eclipseDuration > 6) sc.temperature -= 0.5;
+      }
+
+      if (sc.heaterOn) sc.temperature += 1.2;
+
+      sc.temperature += (Math.random() - 0.5) * 0.4;   /* ±0.2 noise */
+      sc.temperature = Math.max(CFG.TEMP_MIN, Math.min(CFG.TEMP_MAX, sc.temperature));
+
+      /* ADCS drift */
+      let drift = (Math.random() - 0.2) * 0.07;
+      if (!sc.inSunlight) drift += 0.03;
+      sc.pointingErrorDeg = Math.max(0, Math.min(5, sc.pointingErrorDeg + drift));
+      sc.attitudeStable = sc.pointingErrorDeg < 1.0;
+
+      /* Comms */
+      if (sc.inGroundContact) {
+        const base = 95 - (sc.pointingErrorDeg * 5);
+        sc.linkQuality = Math.max(20, Math.min(100,
+          base + (Math.random() - 0.5) * 4));
+        if (sc.mode !== 'NOMINAL') sc.linkQuality *= 0.85;
+        if (sc.linkQuality > 60) {
+          sc.downlinkPackets += Math.floor(Math.random() * 5);
+          sc.uplinkPackets   += Math.floor(Math.random() * 3);
         }
+      } else {
+        sc.linkQuality = Math.max(0, sc.linkQuality - 5);
+      }
+
+      /* History */
+      for (const [k, v] of [
+        ['battery', sc.battery],
+        ['temperature', sc.temperature],
+        ['linkQuality', sc.linkQuality],
+        ['pointingError', sc.pointingErrorDeg],
+      ]) {
+        sc.history[k].push(parseFloat(v.toFixed(2)));
+        if (sc.history[k].length > 60) sc.history[k].shift();
       }
     }
-  });
-}
 
-const chartBattery = makeChart('chart-battery', '#F59E0B',   0, 100, '%');
-const chartTemp    = makeChart('chart-temp',    '#EF4444', -20,  80, '°C');
-const chartLink    = makeChart('chart-link',    '#3B82F6',   0, 100, '%');
+    /* ── FDIR — detection (from fdir.py → detect_faults) ── */
+    function detectFaults(sc) {
+      const faults = [];
 
-function pushChart(chart, value, maxPoints = 50) {
-  chart.data.labels.push('');
-  chart.data.datasets[0].data.push(value);
-  if (chart.data.labels.length > maxPoints) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
-  }
-  chart.update();
-}
+      function check(cond, key) {
+        if (cond && !sc.activeFaults.has(key)) {
+          faults.push({ type: key, ...FAULT_DEFS[key] });
+          sc.activeFaults.add(key);
+        }
+      }
 
-// ── Orbit Visualisation ────────────────────────────────────────────────────
-function updateOrbitVis(orbitStep, orbitPeriod, inSunlight) {
-  const angle = (orbitStep / orbitPeriod) * 2 * Math.PI - Math.PI / 2;
-  const R = 44, cx = 60, cy = 60;
-  const sx = cx + R * Math.cos(angle);
-  const sy = cy + R * Math.sin(angle);
+      check(sc.battery < CFG.POWER_CRITICAL_THRESHOLD,                                 'CRITICAL_BATTERY');
+      check(sc.battery >= CFG.POWER_CRITICAL_THRESHOLD &&
+            sc.battery <  CFG.POWER_LOW_THRESHOLD,                                      'LOW_BATTERY');
+      check(sc.temperature > CFG.TEMP_FAULT_HIGH,                                       'HIGH_TEMP');
+      check(sc.temperature < CFG.TEMP_FAULT_LOW,                                        'LOW_TEMP');
+      check(sc.pointingErrorDeg > 1.5,                                                  'ATTITUDE_FAULT');
+      check(sc.inGroundContact && sc.linkQuality < 50,                                  'COMMS_DEGRADED');
 
-  const satG = document.getElementById('sat-pos');
-  satG.setAttribute('transform', `translate(${sx.toFixed(1)}, ${sy.toFixed(1)})`);
-}
+      if (faults.length) sc.totalFaults += faults.length;
+      return faults;
+    }
 
-// ── Status Helpers ─────────────────────────────────────────────────────────
-function setStatus(id, good, label, dotClass) {
-  const el = document.getElementById(id);
-  el.innerHTML = `<div class="dot ${dotClass || (good ? 'green' : 'red')}"></div><span>${label}</span>`;
-}
+    /* ── FDIR — isolation ──────────────────────────────── */
+    function isolateFaults(sc, faults) {
+      const actions = [];
+      const sevs = new Set(faults.map(f => f.severity));
 
-function setBatBar(pct) {
-  const bar = document.getElementById('sb-battery-bar');
-  bar.style.width = pct + '%';
-  bar.style.background = pct < 15 ? '#EF4444' : pct < 30 ? '#F59E0B' : '#10B981';
-}
+      for (const f of faults) {
+        if (['LOW_BATTERY','CRITICAL_BATTERY','HIGH_TEMP'].includes(f.type)) {
+          if (!actions.includes('PAYLOAD_OFF')) actions.push('PAYLOAD_OFF');
+        }
+        if (f.type === 'LOW_TEMP')        actions.push('ENABLE_HEATER');
+        if (f.type === 'ATTITUDE_FAULT')  actions.push('STABILISE_ATTITUDE');
+      }
 
-function setTempBar(temp) {
-  const bar = document.getElementById('sb-temp-bar');
-  const pct = Math.max(0, Math.min(100, ((temp + 20) / 100) * 100));
-  bar.style.width = pct + '%';
-  bar.style.background = temp > 45 ? '#EF4444' : temp < -10 ? '#3B82F6' : '#F59E0B';
-}
+      if (sevs.has('CRITICAL')) {
+        actions.push('ENTER_EMERGENCY');
+      } else if (sevs.has('WARNING')) {
+        if (!actions.includes('ENTER_SAFE_MODE')) actions.push('ENTER_SAFE_MODE');
+      }
 
-function setModeBadge(mode) {
-  const badge = document.getElementById('mode-badge');
-  const text  = document.getElementById('mode-text');
-  badge.className = 'mode-badge ' + mode.toLowerCase();
-  text.textContent = mode;
-}
+      return actions;
+    }
 
-// ── Fault Rendering ────────────────────────────────────────────────────────
-function renderFaults(activeFaults) {
-  const list = document.getElementById('fault-list');
+    /* ── FDIR — recovery ──────────────────────────────── */
+    function recoverFaults(sc, faults) {
+      const actions = [];
+      for (const f of faults) {
+        if (['LOW_BATTERY','CRITICAL_BATTERY'].includes(f.type)) actions.push('ENABLE_CHARGING');
+        if (f.type === 'HIGH_TEMP') actions.push('REDUCE_THERMAL_LOAD');
+        if (f.type === 'LOW_TEMP')  actions.push('ENABLE_HEATER');
+      }
+      return actions;
+    }
 
-  if (!activeFaults || activeFaults.length === 0) {
-    list.innerHTML = `<div class="no-faults"><div class="dot green"></div>All systems nominal</div>`;
-    return;
-  }
+    /* ── FDIR — resolution check ─────────────────────── */
+    function recoveryComplete(sc) {
+      const resolved = new Set();
+      if (sc.activeFaults.has('CRITICAL_BATTERY') && sc.battery > CFG.POWER_LOW_THRESHOLD)
+        resolved.add('CRITICAL_BATTERY');
+      if (sc.activeFaults.has('LOW_BATTERY') && sc.battery > CFG.POWER_RECOVER_THRESHOLD)
+        resolved.add('LOW_BATTERY');
+      if (sc.activeFaults.has('HIGH_TEMP') && sc.temperature < CFG.TEMP_RECOVER_HIGH)
+        resolved.add('HIGH_TEMP');
+      if (sc.activeFaults.has('LOW_TEMP') && sc.temperature > CFG.TEMP_RECOVER_LOW)
+        resolved.add('LOW_TEMP');
+      if (sc.activeFaults.has('ATTITUDE_FAULT') && sc.pointingErrorDeg < 0.8)
+        resolved.add('ATTITUDE_FAULT');
+      if (sc.activeFaults.has('COMMS_DEGRADED') && sc.linkQuality > 65)
+        resolved.add('COMMS_DEGRADED');
+      return resolved;
+    }
 
-  const severityMap = {
-    CRITICAL_BATTERY: { sev: 'critical', sub: 'EPS' },
-    LOW_BATTERY:      { sev: 'warning',  sub: 'EPS' },
-    HIGH_TEMP:        { sev: 'warning',  sub: 'THERMAL' },
-    LOW_TEMP:         { sev: 'warning',  sub: 'THERMAL' },
-    ATTITUDE_FAULT:   { sev: 'warning',  sub: 'ADCS' },
-    COMMS_DEGRADED:   { sev: 'caution',  sub: 'COMMS' },
-  };
+    /* ── SPACECRAFT COMMAND EXECUTOR ──────────────────── */
+    function execute(sc, cmd) {
+      switch (cmd) {
+        case 'ENTER_SAFE_MODE':
+          sc.mode = 'SAFE';
+          if (sc.preFaultPayloadState === null) sc.preFaultPayloadState = sc.payloadOn;
+          sc.payloadOn = false;
+          break;
+        case 'EXIT_SAFE_MODE':
+          sc.mode = 'NOMINAL';
+          break;
+        case 'ENTER_EMERGENCY':
+          sc.mode = 'EMERGENCY';
+          if (sc.preFaultPayloadState === null) sc.preFaultPayloadState = sc.payloadOn;
+          sc.payloadOn = false;
+          break;
+        case 'EXIT_EMERGENCY':
+          sc.mode = 'NOMINAL';
+          break;
+        case 'PAYLOAD_OFF':
+          sc.payloadOn = false;
+          break;
+        case 'PAYLOAD_ON':
+          sc.payloadOn = true;
+          break;
+        case 'ENABLE_CHARGING':
+          if (sc.inSunlight && sc.solarArrayActive)
+            sc.battery = Math.min(CFG.BATTERY_MAX, sc.battery + 8);
+          break;
+        case 'ENABLE_HEATER':
+          sc.heaterOn = true;
+          break;
+        case 'DISABLE_HEATER':
+          sc.heaterOn = false;
+          break;
+        case 'REDUCE_THERMAL_LOAD':
+          sc.temperature = Math.max(CFG.TEMP_MIN, sc.temperature - 5);
+          break;
+        case 'STABILISE_ATTITUDE':
+          sc.pointingErrorDeg = Math.max(0.1, sc.pointingErrorDeg * 0.5);
+          break;
+      }
+    }
 
-  const descMap = {
-    CRITICAL_BATTERY: 'Imminent power loss – emergency action',
-    LOW_BATTERY:      'Battery below minimum threshold',
-    HIGH_TEMP:        'Temperature exceeding safe operating range',
-    LOW_TEMP:         'Temperature below cold survival limit',
-    ATTITUDE_FAULT:   'Pointing error exceeds threshold',
-    COMMS_DEGRADED:   'Downlink quality degraded',
-  };
+    /* ── SCHEDULER (from schedular.py) ───────────────── */
+    function schedule(sc) {
+      const cmds = [];
+      if (sc.mode === 'NOMINAL') {
+        if (sc.battery > 60 && sc.inSunlight &&
+            sc.temperature > CFG.TEMP_FAULT_LOW && sc.temperature < CFG.TEMP_FAULT_HIGH) {
+          cmds.push('PAYLOAD_ON');
+        } else if (sc.battery < CFG.POWER_LOW_THRESHOLD ||
+                   sc.temperature >= CFG.TEMP_FAULT_HIGH) {
+          cmds.push('PAYLOAD_OFF');
+        }
+        if (sc.temperature < -8) cmds.push('ENABLE_HEATER');
+      }
+      return cmds;
+    }
 
-  list.innerHTML = activeFaults.map(ft => {
-    const info = severityMap[ft] || { sev: 'warning', sub: 'UNK' };
-    return `
-      <div class="fault-item ${info.sev}">
-        <div>
-          <div class="fault-severity ${info.sev}">${info.sev}</div>
-          <div class="fault-type">${ft}</div>
-          <div class="fault-desc">${descMap[ft] || ''}</div>
+
+    /* ── SIMULATION LOOP ─────────────────────────────── */
+    let sc          = makeSC();
+    let stepCounter = 0;
+    let eventLog    = [{ step:0, kind:'NOMINAL', detail:'Simulation initialised' }];
+    let paused      = false;
+    let simInterval = null;
+    let simSpeed    = 1000;   /* ms per step */
+    let metSeconds  = 0;
+
+    function logEvent(step, kind, detail) {
+      eventLog.push({ step, kind, detail });
+      if (eventLog.length > 100) eventLog.shift();
+    }
+
+    function simStep() {
+      stepCounter += 1;
+      metSeconds  += 60;   /* 1 step = 1 minute */
+
+      lifecycleUpdate(sc);
+
+      /* Scheduler */
+      const schedCmds = schedule(sc);
+      for (const c of schedCmds) execute(sc, c);
+
+      /* FDIR */
+      const faults = detectFaults(sc);
+      for (const f of faults) {
+        logEvent(stepCounter, 'FAULT', `${f.type} [${f.subsystem}] ${f.severity}`);
+      }
+
+      if (faults.length) {
+        const isoActions = isolateFaults(sc, faults);
+        for (const a of isoActions) execute(sc, a);
+
+        const recActions = recoverFaults(sc, faults);
+        for (const a of recActions) execute(sc, a);
+      }
+
+      /* Recovery validation */
+      if (sc.mode === 'SAFE' || sc.mode === 'EMERGENCY') {
+        const resolved = recoveryComplete(sc);
+        if (resolved.size > 0) {
+          for (const r of resolved) {
+            sc.activeFaults.delete(r);
+            logEvent(stepCounter, 'RESOLVED', r);
+          }
+        }
+
+        if (sc.activeFaults.size === 0) {
+          execute(sc, 'EXIT_SAFE_MODE');
+          execute(sc, 'EXIT_EMERGENCY');
+
+          if (sc.preFaultPayloadState) {
+            if (sc.battery > 40 &&
+                sc.temperature < CFG.TEMP_FAULT_HIGH &&
+                sc.temperature > CFG.TEMP_FAULT_LOW &&
+                sc.inSunlight) {
+              execute(sc, 'PAYLOAD_ON');
+              logEvent(stepCounter, 'RECOVERY', 'Payload restored to ON');
+            }
+          }
+          sc.preFaultPayloadState = null;
+          logEvent(stepCounter, 'NOMINAL', 'Spacecraft returned to NOMINAL');
+        }
+      }
+
+      /* Orbit log */
+      if (sc.orbitStep === 1) {
+        logEvent(stepCounter, 'ORBIT', `Orbit #${sc.orbitNumber} started`);
+      }
+
+      updateUI();
+    }
+
+    function startLoop() {
+      if (simInterval) clearInterval(simInterval);
+      simInterval = setInterval(() => {
+        if (!paused) simStep();
+      }, simSpeed);
+    }
+
+    function togglePause() {
+      paused = !paused;
+      document.getElementById('pauseBtn').textContent = paused ? '▶ Resume' : '⏸ Pause';
+    }
+
+    function resetSim() {
+      sc = makeSC();
+      stepCounter = 0;
+      metSeconds  = 0;
+      eventLog = [{ step:0, kind:'NOMINAL', detail:'Simulation reset' }];
+      updateUI();
+    }
+
+    function setSpeed(ms) {
+      simSpeed = ms;
+      startLoop();
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      const labels = { 2000:'0.5×', 1000:'1×', 500:'2×', 200:'5×' };
+      document.querySelectorAll('.speed-btn').forEach(b => {
+        if (b.textContent === labels[ms]) b.classList.add('active');
+      });
+    }
+
+    function sendCmd(cmd) {
+      execute(sc, cmd);
+      logEvent(stepCounter, 'COMMAND', cmd);
+      updateUI();
+    }
+
+
+    /* ── UI UPDATE ─────────────────────────────────────── */
+    function fmt1(v) { return v.toFixed(1); }
+    function fmt2(v) { return v.toFixed(2); }
+
+    function barColor(pct, warnAt, critAt) {
+      if (pct <= critAt) return 'var(--bar-crit)';
+      if (pct <= warnAt) return 'var(--bar-warn)';
+      return 'var(--bar-good)';
+    }
+
+    function readingClass(val, warnLo, warnHi, critLo, critHi) {
+      if ((critLo !== null && val < critLo) || (critHi !== null && val > critHi)) return 'critical';
+      if ((warnLo !== null && val < warnLo) || (warnHi !== null && val > warnHi)) return 'warn';
+      return 'ok';
+    }
+
+    function pillClass(val, warnLo, warnHi, critLo, critHi) {
+      if ((critLo !== null && val < critLo) || (critHi !== null && val > critHi)) return 'crit';
+      if ((warnLo !== null && val < warnLo) || (warnHi !== null && val > warnHi)) return 'warn';
+      return 'nominal';
+    }
+
+    function setPill(id, label, cls) {
+      const el = document.getElementById(id);
+      el.className = `status-pill ${cls}`;
+      el.innerHTML = `<span class="pill-dot"></span>${label}`;
+    }
+
+    function setModeBadge(mode) {
+      const badge = document.getElementById('modeBadge');
+      badge.className = `mode-badge ${mode.toLowerCase()}`;
+      document.getElementById('modeText').textContent = mode;
+    }
+
+    function fmtMET(secs) {
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      return `T+${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function updateUI() {
+      /* Header */
+      document.getElementById('metClock').textContent  = fmtMET(metSeconds);
+      document.getElementById('stepCount').textContent = String(stepCounter).padStart(4,'0');
+      document.getElementById('orbitNum').textContent  = `#${sc.orbitNumber}`;
+      setModeBadge(sc.mode);
+
+      /* Alert banner */
+      const banner = document.getElementById('alertBanner');
+      if (sc.activeFaults.size > 0) {
+        banner.classList.add('visible');
+        const hasCrit = [...sc.activeFaults].some(f =>
+          FAULT_DEFS[f] && FAULT_DEFS[f].severity === 'CRITICAL');
+        banner.className = `alert-banner visible ${hasCrit ? '' : 'warning'}`;
+        document.getElementById('alertFaults').innerHTML =
+          [...sc.activeFaults].map(f =>
+            `<span class="alert-fault-tag">${f}</span>`
+          ).join('');
+      } else {
+        banner.classList.remove('visible');
+      }
+
+      /* Battery */
+      const battPct = parseFloat(fmt1(sc.battery));
+      document.getElementById('battVal').textContent = battPct + '%';
+      document.getElementById('battVal').className =
+        'reading-value ' + readingClass(battPct, 40, null, 10, null);
+      const battBar = document.getElementById('battBar');
+      battBar.style.width = battPct + '%';
+      battBar.style.background = barColor(battPct, 40, 10);
+      document.getElementById('bigBatt').textContent = fmt1(sc.battery);
+      document.getElementById('powerVal').textContent = fmt2(sc.powerDrawW) + ' W';
+
+      const solarActive = sc.inSunlight && sc.solarArrayActive;
+      setPill('solarPill', solarActive ? 'CHARGING' : 'ECLIPSE',
+              solarActive ? 'on' : 'inactive');
+      document.getElementById('epsBadge').textContent =
+        sc.activeFaults.has('CRITICAL_BATTERY') ? 'CRITICAL' :
+        sc.activeFaults.has('LOW_BATTERY') ? 'LOW BATTERY' : 'NOMINAL';
+
+      /* Temperature */
+      const temp = parseFloat(fmt1(sc.temperature));
+      document.getElementById('tempVal').textContent = temp + ' °C';
+      document.getElementById('tempVal').className =
+        'reading-value ' + readingClass(temp, -5, 40, -15, 50);
+      const tempPct = ((temp - CFG.TEMP_MIN) / (CFG.TEMP_MAX - CFG.TEMP_MIN)) * 100;
+      const tempBar = document.getElementById('tempBar');
+      tempBar.style.width = Math.max(0, tempPct) + '%';
+      tempBar.style.background = barColor(100 - Math.abs(temp - 20) * 2, 40, 15);
+      document.getElementById('bigTemp').textContent = fmt1(sc.temperature);
+
+      setPill('heaterPill', sc.heaterOn ? 'ON' : 'OFF', sc.heaterOn ? 'warn' : 'inactive');
+      document.getElementById('thermalBadge').textContent =
+        sc.activeFaults.has('HIGH_TEMP') ? 'OVER TEMP' :
+        sc.activeFaults.has('LOW_TEMP')  ? 'UNDER TEMP' : 'NOMINAL';
+
+      /* ADCS */
+      const ptErr = parseFloat(fmt2(sc.pointingErrorDeg));
+      document.getElementById('pointVal').textContent = ptErr + '°';
+      document.getElementById('pointVal').className =
+        'reading-value ' + readingClass(ptErr, null, 1.0, null, 1.5);
+      const ptBar = document.getElementById('pointBar');
+      ptBar.style.width = Math.min(100, ptErr / 5 * 100) + '%';
+      ptBar.style.background = barColor(100 - ptErr * 20, 70, 30);
+      setPill('attitudePill',
+        sc.attitudeStable ? 'STABLE' : 'UNSTABLE',
+        sc.attitudeStable ? 'nominal' : 'warn');
+      document.getElementById('adcsBadge').textContent =
+        sc.activeFaults.has('ATTITUDE_FAULT') ? 'FAULT' :
+        sc.attitudeStable ? 'STABLE' : 'DRIFTING';
+
+      /* Comms */
+      const lq = parseFloat(fmt1(sc.linkQuality));
+      document.getElementById('linkVal').textContent = lq + '%';
+      document.getElementById('linkVal').className =
+        'reading-value ' + readingClass(lq, 65, null, 50, null);
+      const linkBar = document.getElementById('linkBar');
+      linkBar.style.width = lq + '%';
+      linkBar.style.background = barColor(lq, 65, 50);
+      document.getElementById('bigLink').textContent = fmt1(sc.linkQuality);
+      setPill('contactPill',
+        sc.inGroundContact ? 'ACTIVE' : 'NO CONTACT',
+        sc.inGroundContact ? 'nominal' : 'inactive');
+      document.getElementById('pktVal').textContent =
+        `${sc.downlinkPackets} / ${sc.uplinkPackets}`;
+      document.getElementById('commsBadge').textContent =
+        sc.inGroundContact ? 'IN CONTACT' : 'OUT OF RANGE';
+
+      /* Orbit */
+      const phase = Math.round((sc.orbitStep / CFG.ORBIT_PERIOD_STEPS) * 100);
+      document.getElementById('orbitNumL').textContent  = sc.orbitNumber;
+      document.getElementById('orbitPhase').textContent = phase + '%';
+      document.getElementById('sunlightState').textContent =
+        sc.inSunlight ? '☀️' : '🌑';
+      document.getElementById('eclipseVal').textContent =
+        sc.eclipseDuration > 0 ? sc.eclipseDuration + ' steps' : '—';
+
+      /* Payload */
+      setPill('payloadPill',
+        sc.payloadOn ? 'ACTIVE' : 'OFFLINE',
+        sc.payloadOn ? 'on' : 'inactive');
+
+      /* Stats */
+      document.getElementById('bigFaults').textContent  = sc.totalFaults;
+      document.getElementById('faultCount').textContent  = sc.activeFaults.size + ' active';
+      document.getElementById('uptimeVal').textContent   = sc.uptimeSteps;
+      document.getElementById('totalFaultsFoot').textContent = sc.totalFaults;
+
+      /* Orbit ring */
+      updateOrbitRing();
+
+      /* Active faults panel */
+      const faultList = document.getElementById('faultList');
+      if (sc.activeFaults.size === 0) {
+        faultList.innerHTML = '<div class="no-faults">✓ No active faults</div>';
+      } else {
+        faultList.innerHTML = [...sc.activeFaults].map(f => {
+          const def = FAULT_DEFS[f] || {};
+          const sevClass = `sev-${def.severity || 'WARNING'}`;
+          return `<div class="fault-row">
+            <span class="fault-type">${f}</span>
+            <span class="fault-sev ${sevClass}">${def.severity || '?'}</span>
+          </div>`;
+        }).join('');
+      }
+
+      /* Event log */
+      renderEventLog();
+
+      /* Charts */
+      drawBattTempChart();
+      drawCommsChart();
+    }
+
+    /* ── ORBIT RING ─────────────────────────────────────── */
+    function updateOrbitRing() {
+      const R = 50;
+      const step = sc.orbitStep;
+      const total = CFG.ORBIT_PERIOD_STEPS;
+      const sunFrac = CFG.SUNLIGHT_FRACTION;
+
+      /* Spacecraft dot position */
+      const angle = (step / total) * 2 * Math.PI - Math.PI / 2;
+      const x = R * Math.cos(angle);
+      const y = R * Math.sin(angle);
+      document.getElementById('scDot').setAttribute('cx', x.toFixed(2));
+      document.getElementById('scDot').setAttribute('cy', y.toFixed(2));
+      document.getElementById('scDot').setAttribute('fill',
+        sc.inSunlight ? '#1a9e5c' : '#6b7280');
+
+      /* Arc paths */
+      function arcPath(startFrac, endFrac) {
+        const a1 = startFrac * 2 * Math.PI - Math.PI / 2;
+        const a2 = endFrac   * 2 * Math.PI - Math.PI / 2;
+        const x1 = (R * Math.cos(a1)).toFixed(2);
+        const y1 = (R * Math.sin(a1)).toFixed(2);
+        const x2 = (R * Math.cos(a2)).toFixed(2);
+        const y2 = (R * Math.sin(a2)).toFixed(2);
+        const large = (endFrac - startFrac) > 0.5 ? 1 : 0;
+        return `M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}`;
+      }
+
+      document.getElementById('sunArc').setAttribute('d', arcPath(0, sunFrac));
+      document.getElementById('eclArc').setAttribute('d', arcPath(sunFrac, 1));
+    }
+
+    /* ── CHART RENDERING ─────────────────────────────────── */
+    function drawBattTempChart() {
+      const canvas = document.getElementById('battTempChart');
+      const ctx    = canvas.getContext('2d');
+      const W      = canvas.offsetWidth;
+      const H      = canvas.height;
+      canvas.width = W;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const battData = sc.history.battery;
+      const tempData = sc.history.temperature;
+      const n = Math.max(battData.length, tempData.length, 2);
+      const pad = { t:12, b:20, l:8, r:8 };
+      const cW = W - pad.l - pad.r;
+      const cH = H - pad.t - pad.b;
+
+      /* Grid lines */
+      ctx.strokeStyle = '#e2e5ea';
+      ctx.lineWidth = 1;
+      [25,50,75,100].forEach(v => {
+        const y = pad.t + cH - (v / 100) * cH;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+        ctx.fillStyle = '#8e949f';
+        ctx.font = '9px Share Tech Mono, monospace';
+        ctx.fillText(v + '%', 0, y + 3);
+      });
+
+      /* Fault threshold lines */
+      function threshLine(val, min, max, color) {
+        const pct = (val - min) / (max - min);
+        const y = pad.t + cH - pct * cH;
+        ctx.strokeStyle = color;
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.5;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.setLineDash([]);
+      }
+
+      threshLine(CFG.POWER_LOW_THRESHOLD, 0, 100, '#dc2626');
+      threshLine(CFG.POWER_CRITICAL_THRESHOLD, 0, 100, '#dc2626');
+
+      /* Battery line */
+      function drawLine(data, minV, maxV, color) {
+        if (data.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        data.forEach((v, i) => {
+          const x = pad.l + (i / (n - 1)) * cW;
+          const y = pad.t + cH - ((v - minV) / (maxV - minV)) * cH;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+
+      drawLine(battData, 0, 100, '#1a9e5c');
+
+      /* Temperature line — scale -20 to 80 mapped to 0–100 */
+      const tempScaled = tempData.map(t => ((t - CFG.TEMP_MIN) / (CFG.TEMP_MAX - CFG.TEMP_MIN)) * 100);
+      drawLine(tempScaled, 0, 100, '#e59400');
+
+      /* X axis labels */
+      ctx.fillStyle = '#8e949f';
+      ctx.font = '9px Share Tech Mono, monospace';
+      ctx.fillText('T-60', pad.l, H - 4);
+      ctx.fillText('T-0', W - pad.r - 20, H - 4);
+    }
+
+    function drawCommsChart() {
+      const canvas = document.getElementById('commsChart');
+      const ctx    = canvas.getContext('2d');
+      const W      = canvas.offsetWidth;
+      const H      = canvas.height;
+      canvas.width = W;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const lqData  = sc.history.linkQuality;
+      const ptData  = sc.history.pointingError;
+      const n = Math.max(lqData.length, ptData.length, 2);
+      const pad = { t:12, b:20, l:8, r:8 };
+      const cW = W - pad.l - pad.r;
+      const cH = H - pad.t - pad.b;
+
+      /* Grid */
+      ctx.strokeStyle = '#e2e5ea';
+      ctx.lineWidth = 1;
+      [25,50,75,100].forEach(v => {
+        const y = pad.t + cH - (v / 100) * cH;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+      });
+
+      function drawLine(data, minV, maxV, color) {
+        if (data.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        data.forEach((v, i) => {
+          const x = pad.l + (i / (n - 1)) * cW;
+          const y = pad.t + cH - ((v - minV) / (maxV - minV)) * cH;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+
+      drawLine(lqData, 0, 100, '#2563eb');
+
+      /* Pointing error ×20 so it's visible on the same scale */
+      const ptScaled = ptData.map(v => Math.min(100, v * 20));
+      drawLine(ptScaled, 0, 100, '#9333ea');
+
+      ctx.fillStyle = '#8e949f';
+      ctx.font = '9px Share Tech Mono, monospace';
+      ctx.fillText('T-60', pad.l, H - 4);
+      ctx.fillText('T-0', W - pad.r - 20, H - 4);
+    }
+
+    /* ── EVENT LOG RENDER ─────────────────────────────────── */
+    function renderEventLog() {
+      const el = document.getElementById('eventLog');
+      const last20 = eventLog.slice(-20).reverse();
+      el.innerHTML = last20.map(e => `
+        <div class="event-entry">
+          <span class="event-step">${String(e.step).padStart(4,'0')}</span>
+          <span class="event-kind ${e.kind}">${e.kind}</span>
+          <span class="event-detail">${e.detail}</span>
         </div>
-        <div class="fault-sub" style="margin-left:auto;padding-top:2px">${info.sub}</div>
-      </div>`;
-  }).join('');
-}
+      `).join('');
+    }
 
-// ── Event Log Rendering ────────────────────────────────────────────────────
-function renderEvents(events) {
-  const log = document.getElementById('event-log');
-  log.innerHTML = [...events].reverse().map(e => `
-    <div class="event-item">
-      <span class="event-step">${e.step}</span>
-      <span class="event-kind ${e.kind}">${e.kind}</span>
-      <span class="event-detail">${e.detail}</span>
-    </div>`).join('');
-}
+    /* ── KICK OFF ─────────────────────────────────────────── */
+    updateUI();
+    startLoop();
 
-// ── Main Update ────────────────────────────────────────────────────────────
-async function stepSim() {
-  try {
-    const res = await fetch(`${API}/step`);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const t = data.telemetry;
+  </script>
 
-    document.getElementById('conn-error').classList.remove('visible');
-
-    // Header
-    document.getElementById('step-label').textContent = `STEP ${data.step}`;
-    setModeBadge(data.mode);
-
-    // Sidebar vitals
-    document.getElementById('sb-battery').textContent = t.battery.toFixed(1);
-    document.getElementById('sb-power').textContent   = t.power_draw_w.toFixed(2);
-    document.getElementById('sb-temp').textContent    = t.temperature.toFixed(1);
-    document.getElementById('sb-orbit').textContent   = `#${t.orbit_number}`;
-    setBatBar(t.battery);
-    setTempBar(t.temperature);
-
-    // Metric cards
-    document.getElementById('m-battery').innerHTML = `${t.battery.toFixed(1)}<span style="font-size:16px">%</span>`;
-    document.getElementById('m-temp').innerHTML    = `${t.temperature.toFixed(1)}<span style="font-size:16px">°C</span>`;
-    document.getElementById('m-link').innerHTML    = `${t.link_quality.toFixed(0)}<span style="font-size:16px">%</span>`;
-    document.getElementById('m-point').innerHTML   = `${t.pointing_error_deg.toFixed(2)}<span style="font-size:14px">°</span>`;
-
-    document.getElementById('m-solar-status').textContent   = t.solar_charging ? 'Solar charging active' : 'Eclipse – battery draining';
-    document.getElementById('m-heater-status').textContent  = t.heater_on ? 'Heater active' : 'Heater off';
-    document.getElementById('m-packets').textContent        = `↑${t.uplink_packets}  ↓${t.downlink_packets} packets`;
-    document.getElementById('m-adcs-status').textContent    = t.attitude_stable ? 'Attitude stable' : 'Attitude unstable';
-
-    // Charts
-    pushChart(chartBattery, t.battery);
-    pushChart(chartTemp,    t.temperature);
-    pushChart(chartLink,    t.link_quality);
-
-    document.getElementById('chart-bat-latest').textContent  = t.battery.toFixed(1) + '%';
-    document.getElementById('chart-temp-latest').textContent = t.temperature.toFixed(1) + ' °C';
-    document.getElementById('chart-link-latest').textContent = t.link_quality.toFixed(0) + '%';
-
-    // Orbit vis
-    updateOrbitVis(data.telemetry.orbit_number % 48, 48, t.in_sunlight);
-    document.getElementById('orb-num').textContent     = t.orbit_number;
-    document.getElementById('orb-eclipse').textContent = t.in_sunlight ? '0 steps' : `${t.eclipse_duration} step${t.eclipse_duration !== 1 ? 's' : ''}`;
-
-    // Status indicators
-    const battOk = t.battery >= 20;
-    const tempOk = t.temperature > -15 && t.temperature < 50;
-    setStatus('st-eps',     battOk, battOk ? 'Nominal' : 'Fault',    battOk ? 'green' : 'red');
-    setStatus('st-thermal', tempOk, tempOk ? 'Nominal' : 'Fault',    tempOk ? 'green' : 'red');
-    setStatus('st-adcs',    t.attitude_stable, t.attitude_stable ? 'Nominal' : 'Unstable',  t.attitude_stable ? 'green' : 'amber');
-    const commsOk = t.link_quality > 50 || !t.in_ground_contact;
-    setStatus('st-comms',   commsOk, t.in_ground_contact ? (commsOk ? 'Acquired' : 'Degraded') : 'Out of range', t.in_ground_contact ? (commsOk ? 'green' : 'amber') : 'grey');
-    setStatus('st-payload', t.payload_on, t.payload_on ? 'Active' : 'Off', t.payload_on ? 'green' : 'grey');
-    setStatus('st-sun',     t.in_sunlight, t.in_sunlight ? 'Illuminated' : 'Eclipse', t.in_sunlight ? 'green' : 'grey');
-    setStatus('st-ground',  t.in_ground_contact, t.in_ground_contact ? 'Acquired' : 'Out of range', t.in_ground_contact ? 'green' : 'grey');
-
-    // Faults & Events
-    renderFaults(data.active_faults);
-    if (data.events) renderEvents(data.events);
-
-  } catch (e) {
-    document.getElementById('conn-error').classList.add('visible');
-    console.error('API error:', e);
-  }
-}
-
-// ── Sim Speed Control ──────────────────────────────────────────────────────
-function setSpeed(ms) {
-  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-
-  if (simInterval) clearInterval(simInterval);
-
-  if (ms === 0) {
-    isPaused = true;
-  } else {
-    isPaused = false;
-    simSpeed = ms;
-    simInterval = setInterval(stepSim, simSpeed);
-  }
-}
-
-// ── Commands ───────────────────────────────────────────────────────────────
-async function sendCmd(cmd) {
-  try {
-    await fetch(`${API}/command/${cmd}`, { method: 'POST' });
-    await stepSim(); // immediate refresh
-  } catch(e) {
-    console.error('Command failed:', e);
-  }
-}
-
-// ── Start ──────────────────────────────────────────────────────────────────
-simInterval = setInterval(stepSim, simSpeed);
-stepSim(); // immediate first fetch
-</script>
 </body>
 </html>
