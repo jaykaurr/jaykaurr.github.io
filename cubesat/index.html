@@ -6,38 +6,65 @@
   <title>AETHER-1 — Mission Control</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & Base ─────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-@@ -40,14 +39,10 @@
+      --bg:        #F2F4F7;
+      --surface:   #FFFFFF;
+      --surface2:  #F7F8FA;
+      --border:    #DDE1E9;
+      --border-m:  #BCC3CF;
+      --text-1:    #0F1724;
+      --text-2:    #4A5568;
+      --text-3:    #8896A8;
+      --text-4:    #B0BAC8;
+
+      --nominal:   #0A7A55;
+      --nominal-bg:#E6F5EF;
+      --safe:      #B45309;
+      --safe-bg:   #FEF3C7;
+      --emergency: #B91C1C;
+      --emergency-bg:#FEE2E2;
+
+      --green:     #10B981;
+      --green-bg:  #ECFDF5;
+      --amber:     #F59E0B;
+      --red:       #EF4444;
+      --red-bg:    #FEF2F2;
+      --blue:      #3B82F6;
+      --blue-bg:   #EFF6FF;
+      --purple:    #8B5CF6;
+      --purple-bg: #F5F3FF;
 
       --mono: 'IBM Plex Mono', monospace;
       --sans: 'IBM Plex Sans', sans-serif;
-
-      --rad-sm: 4px;
       --rad:    8px;
       --rad-lg: 12px;
-      --rad-xl: 16px;
-
+      --rad-sm: 4px;
       --shadow-sm: 0 1px 3px rgba(15,23,36,0.07), 0 1px 2px rgba(15,23,36,0.05);
-      --shadow:    0 4px 12px rgba(15,23,36,0.08), 0 2px 4px rgba(15,23,36,0.04);
     }
 
     html, body {
-@@ -59,7 +54,6 @@
+      height: 100%;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-1);
+      font-size: 13px;
       line-height: 1.5;
     }
 
-    /* ── Layout ───────────────────────────────── */
+    /* ── Shell grid ── */
     .shell {
       display: grid;
       grid-template-rows: 52px 1fr;
-@@ -71,14 +65,14 @@
+      grid-template-columns: 220px 1fr 280px;
+      grid-template-areas:
+        "header header header"
+        "sidebar main   right";
+      height: 100vh;
       overflow: hidden;
     }
 
-    /* ── Header ───────────────────────────────── */
     /* ── Header ── */
     .header {
       grid-area: header;
@@ -45,51 +72,80 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
-      gap: 20px;
       gap: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-@@ -89,12 +83,6 @@
-      color: #fff;
-    }
-
-    .sat-icon {
-      width: 28px;
-      height: 28px;
-      position: relative;
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .header-title {
       font-size: 14px;
       font-weight: 600;
-@@ -129,9 +117,9 @@
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+
+    .header-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .mode-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       transition: all 0.3s;
     }
 
-    .mode-badge.nominal  { background: var(--nominal-bg);   color: var(--nominal);   }
-    .mode-badge.safe     { background: var(--safe-bg);      color: var(--safe);      }
-    .mode-badge.emergency{ background: var(--emergency-bg); color: var(--emergency); }
     .mode-badge.nominal   { background: var(--nominal-bg);   color: var(--nominal);   }
     .mode-badge.safe      { background: var(--safe-bg);      color: var(--safe);      }
     .mode-badge.emergency { background: var(--emergency-bg); color: var(--emergency); }
 
     .mode-dot {
-      width: 7px; height: 7px;
-@@ -142,7 +130,7 @@
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 2s infinite;
+    }
 
-    @keyframes pulse-dot {
+    @keyframes blink {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-      50% { opacity: 0.35; }
+      50%       { opacity: 0.35; }
     }
 
     .header-clock {
-@@ -159,7 +147,17 @@
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.06em;
+    }
+
+    .header-step {
+      font-family: var(--mono);
+      font-size: 11px;
       color: rgba(255,255,255,0.35);
     }
 
-    /* ── Sidebar ──────────────────────────────── */
     .js-badge {
       font-family: var(--mono);
       font-size: 10px;
@@ -104,82 +160,133 @@
     .sidebar {
       grid-area: sidebar;
       background: var(--surface);
-@@ -183,19 +181,14 @@
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px 0;
+    }
+
+    .sidebar-section {
+      padding: 0 14px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-bottom: 8px;
       padding: 0 2px;
     }
 
-    /* ── Vitals Card ──────────────────────────── */
     .vital-card {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: var(--rad);
       padding: 10px 12px;
       margin-bottom: 6px;
-      cursor: default;
-      transition: border-color 0.2s;
     }
-
-    .vital-card:hover { border-color: var(--border-m); }
 
     .vital-row {
       display: flex;
       align-items: baseline;
-@@ -237,7 +230,6 @@
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .vital-name  { font-size: 11px; color: var(--text-3); font-weight: 500; }
+
+    .vital-value {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-1);
+    }
+
+    .vital-unit  { font-size: 10px; color: var(--text-3); margin-left: 2px; }
+
+    .vital-bar-track {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .vital-bar-fill {
+      height: 100%;
+      border-radius: 2px;
       transition: width 0.5s ease, background 0.3s;
     }
 
-    /* Status Dots ─────────────────────────────── */
     .status-row {
       display: flex;
       align-items: center;
-@@ -248,10 +240,7 @@
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
 
     .status-row:last-child { border-bottom: none; }
 
-    .status-label {
-      font-size: 11px;
-      color: var(--text-2);
-    }
     .status-label { font-size: 11px; color: var(--text-2); }
 
     .status-indicator {
       display: flex;
-@@ -267,13 +256,13 @@
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
       flex-shrink: 0;
     }
 
-    .dot.green   { background: var(--green); }
-    .dot.amber   { background: var(--amber); }
-    .dot.red     { background: var(--red); box-shadow: 0 0 0 2px rgba(239,68,68,0.2); }
-    .dot.grey    { background: var(--text-4); }
-    .dot.pulse   { animation: pulse-dot 1.5s infinite; }
-    .dot.green  { background: var(--green); }
-    .dot.amber  { background: var(--amber); }
-    .dot.red    { background: var(--red); box-shadow: 0 0 0 2px rgba(239,68,68,0.2); }
-    .dot.grey   { background: var(--text-4); }
-    .dot.pulse  { animation: pulse-dot 1.5s infinite; }
+    .dot.green { background: var(--green); }
+    .dot.amber { background: var(--amber); }
+    .dot.red   { background: var(--red); box-shadow: 0 0 0 2px rgba(239,68,68,0.2); }
+    .dot.grey  { background: var(--text-4); }
 
-    /* ── Main Area ────────────────────────────── */
     /* ── Main ── */
     .main {
       grid-area: main;
       overflow-y: auto;
-@@ -283,7 +272,6 @@
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
       gap: 16px;
     }
 
-    /* ── Metric Row ───────────────────────────── */
     .metric-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-@@ -309,10 +297,10 @@
+      gap: 10px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rad-lg);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent, var(--border));
       border-radius: var(--rad-lg) var(--rad-lg) 0 0;
     }
 
-    .metric-card.power    { --accent: var(--amber); }
-    .metric-card.thermal  { --accent: var(--red); }
-    .metric-card.comms    { --accent: var(--blue); }
-    .metric-card.adcs     { --accent: var(--purple); }
     .metric-card.power   { --accent: var(--amber); }
     .metric-card.thermal { --accent: var(--red); }
     .metric-card.comms   { --accent: var(--blue); }
@@ -187,158 +294,262 @@
 
     .metric-label {
       font-size: 10px;
-@@ -333,12 +321,8 @@
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text-1);
+      line-height: 1;
+      margin-bottom: 4px;
       transition: color 0.3s;
     }
 
-    .metric-sub {
-      font-size: 11px;
-      color: var(--text-3);
-    }
     .metric-sub { font-size: 11px; color: var(--text-3); }
 
-    /* ── Charts Row ───────────────────────────── */
     .charts-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-@@ -364,7 +348,6 @@
+      gap: 12px;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rad-lg);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .chart-title {
       font-size: 12px;
       font-weight: 600;
       color: var(--text-2);
-      letter-spacing: 0.02em;
     }
 
     .chart-badge {
-@@ -381,7 +364,6 @@
+      font-size: 10px;
+      font-family: var(--mono);
+      padding: 2px 8px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--text-3);
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
       height: 110px;
     }
 
-    /* ── Orbit Card ───────────────────────────── */
     .orbit-card {
       background: var(--surface);
       border: 1px solid var(--border);
-@@ -396,10 +378,6 @@
-      gap: 20px;
+      border-radius: var(--rad-lg);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
     }
 
-    .orbit-svg-wrap {
-      flex-shrink: 0;
+    .orbit-visual {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
     .orbit-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-@@ -430,7 +408,7 @@
+      gap: 8px;
+      flex: 1;
+    }
+
+    .orbit-stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--rad);
+      padding: 8px 10px;
+    }
+
+    .orbit-stat-label {
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .orbit-stat-value {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
       color: var(--text-1);
     }
 
-    /* ── Right Panel ──────────────────────────── */
     /* ── Right Panel ── */
     .right-panel {
       grid-area: right;
       background: var(--surface);
-@@ -454,7 +432,6 @@
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
       margin-bottom: 10px;
     }
 
-    /* ── Active Faults ────────────────────────── */
     .fault-list { display: flex; flex-direction: column; gap: 6px; }
 
     .fault-item {
-@@ -473,20 +450,9 @@
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: var(--rad);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      animation: fault-in 0.3s ease;
+    }
+
+    @keyframes fault-in {
+      from { opacity: 0; transform: translateX(8px); }
       to   { opacity: 1; transform: none; }
     }
 
-    .fault-item.critical {
-      background: var(--emergency-bg);
-      border-color: #FECACA;
-    }
-
-    .fault-item.warning {
-      background: var(--safe-bg);
-      border-color: #FDE68A;
-    }
-
-    .fault-item.caution {
-      background: var(--blue-bg);
-      border-color: #BFDBFE;
-    }
     .fault-item.critical { background: var(--emergency-bg); border-color: #FECACA; }
     .fault-item.warning  { background: var(--safe-bg);      border-color: #FDE68A; }
     .fault-item.caution  { background: var(--blue-bg);      border-color: #BFDBFE; }
 
     .fault-severity {
       font-size: 9px;
-@@ -507,17 +473,8 @@
-      font-family: var(--mono);
-    }
-
-    .fault-desc {
-      font-size: 11px;
-      color: var(--text-2);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       margin-top: 1px;
     }
 
-    .fault-sub {
-      font-size: 10px;
-      color: var(--text-3);
+    .fault-severity.critical { color: var(--red); }
+    .fault-severity.warning  { color: var(--amber); }
+    .fault-severity.caution  { color: var(--blue); }
+
+    .fault-type {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-1);
       font-family: var(--mono);
     }
+
     .fault-desc { font-size: 11px; color: var(--text-2); margin-top: 1px; }
     .fault-sub  { font-size: 10px; color: var(--text-3); font-family: var(--mono); }
 
     .no-faults {
       display: flex;
-@@ -532,7 +489,6 @@
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: var(--green-bg);
+      border: 1px solid #A7F3D0;
+      border-radius: var(--rad);
+      font-size: 12px;
+      color: var(--nominal);
       font-weight: 500;
     }
 
-    /* ── Event Log ────────────────────────────── */
     .event-log { display: flex; flex-direction: column; gap: 2px; }
 
     .event-item {
-@@ -568,20 +524,15 @@
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      animation: log-in 0.25s ease;
+    }
+
+    @keyframes log-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .event-step {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-4);
+      min-width: 32px;
+      padding-top: 1px;
+    }
+
+    .event-kind {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
       margin-top: 1px;
     }
 
-    .event-kind.FAULT     { background: var(--emergency-bg); color: var(--red); }
-    .event-kind.RESOLVED  { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.RECOVERY  { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.NOMINAL   { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.ORBIT     { background: var(--blue-bg);      color: var(--blue); }
-    .event-kind.COMMAND   { background: var(--purple-bg);    color: var(--purple); }
-    .event-kind.FAULT    { background: var(--emergency-bg); color: var(--red); }
+    .event-kind.FAULT    { background: var(--emergency-bg); color: var(--red);     }
     .event-kind.RESOLVED { background: var(--green-bg);     color: var(--nominal); }
     .event-kind.RECOVERY { background: var(--green-bg);     color: var(--nominal); }
     .event-kind.NOMINAL  { background: var(--green-bg);     color: var(--nominal); }
-    .event-kind.ORBIT    { background: var(--blue-bg);      color: var(--blue); }
-    .event-kind.COMMAND  { background: var(--purple-bg);    color: var(--purple); }
+    .event-kind.ORBIT    { background: var(--blue-bg);      color: var(--blue);    }
+    .event-kind.COMMAND  { background: var(--purple-bg);    color: var(--purple);  }
 
-    .event-detail {
-      font-size: 11px;
-      color: var(--text-2);
-      line-height: 1.4;
-    }
     .event-detail { font-size: 11px; color: var(--text-2); line-height: 1.4; }
 
-    /* ── Controls ─────────────────────────────── */
     .controls { display: flex; flex-direction: column; gap: 6px; }
 
     .ctrl-btn {
-@@ -610,34 +561,21 @@
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--rad);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+
+    .ctrl-btn:hover {
+      background: var(--surface);
+      border-color: var(--border-m);
+      color: var(--text-1);
+      box-shadow: var(--shadow-sm);
+    }
 
     .ctrl-btn:active { transform: scale(0.98); }
-
-    .ctrl-btn.primary {
-      background: var(--text-1);
-      border-color: var(--text-1);
-      color: #fff;
-    }
-
-    .ctrl-btn.primary:hover {
-      background: #1E2A3A;
-      border-color: #1E2A3A;
-    }
 
     .ctrl-btn.danger {
       color: var(--red);
@@ -346,7 +557,11 @@
       background: var(--emergency-bg);
     }
 
-    /* ── Speed Control ────────────────────────── */
+    .ctrl-btn.danger:hover {
+      background: var(--red-bg);
+      border-color: var(--red);
+    }
+
     .speed-row {
       display: flex;
       align-items: center;
@@ -354,330 +569,335 @@
       margin-top: 10px;
     }
 
-    .speed-label { font-size: 11px; color: var(--text-3); min-width: 50px; }
-
-    .speed-btns { display: flex; gap: 4px; }
     .speed-label { font-size: 11px; color: var(--text-3); min-width: 60px; }
     .speed-btns  { display: flex; gap: 4px; }
 
     .speed-btn {
       padding: 3px 10px;
-@@ -654,73 +592,31 @@
-    .speed-btn:hover { border-color: var(--border-m); color: var(--text-1); }
-    .speed-btn.active { background: var(--text-1); border-color: var(--text-1); color: #fff; }
-
-    /* ── Paused Overlay ───────────────────────── */
-    .paused-banner {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      background: var(--safe-bg);
-      border-bottom: 1px solid #FDE68A;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--safe);
-      grid-column: 1 / -1;
+      font-size: 11px;
+      font-family: var(--mono);
+      border: 1px solid var(--border);
+      border-radius: var(--rad-sm);
+      background: transparent;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: all 0.15s;
     }
 
-    .paused-banner.visible { display: flex; }
+    .speed-btn:hover  { border-color: var(--border-m); color: var(--text-1); }
+    .speed-btn.active { background: var(--text-1); border-color: var(--text-1); color: #fff; }
 
-    /* ── Scrollbar ────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--border-m); }
 
-    /* ── Connection error ─────────────────────── */
-    .conn-error {
-      display: none;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: var(--emergency-bg);
-      border: 1px solid #FECACA;
-      border-radius: 100px;
-      font-size: 11px;
-      color: var(--red);
-      font-weight: 500;
-    }
-
-    .conn-error.visible { display: flex; }
-
-    /* Responsive adjustments */
     @media (max-width: 1100px) {
-      .shell {
-        grid-template-columns: 190px 1fr 240px;
-      }
-      .metric-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      .shell { grid-template-columns: 190px 1fr 240px; }
-      .metric-row { grid-template-columns: 1fr 1fr; }
+      .shell       { grid-template-columns: 190px 1fr 240px; }
+      .metric-row  { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
-
 <div class="shell">
 
-  <!-- ── Header ─────────────────────────────── -->
-  <!-- ── Header ── -->
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
   <header class="header">
+
     <div class="header-logo">
-      <svg class="sat-icon" viewBox="0 0 28 28" fill="none">
-        <rect x="11" y="8" width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.9)"/>
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
         <rect x="11" y="8"  width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.9)"/>
         <rect x="2"  y="12" width="8" height="4"  rx="1"   fill="rgba(255,255,255,0.6)"/>
         <rect x="18" y="12" width="8" height="4"  rx="1"   fill="rgba(255,255,255,0.6)"/>
         <circle cx="14" cy="14" r="2" fill="rgba(255,255,255,0.4)"/>
-        <line x1="14" y1="3"  x2="14" y2="7"  stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="14" y1="21" x2="14" y2="25" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
       <div>
         <div class="header-title">AETHER-1</div>
-        <div class="header-sub">MX-2024-001 · LEO 550 km</div>
         <div class="header-sub">AX-2024-001 · LEO 550 km · 437.1 MHz</div>
       </div>
     </div>
 
-@@ -731,27 +627,25 @@
+    <div class="header-divider"></div>
+
+    <div class="mode-badge nominal" id="mode-badge">
+      <div class="mode-dot"></div>
       <span id="mode-text">NOMINAL</span>
     </div>
 
-    <div class="conn-error" id="conn-error">
-      <div class="dot red pulse"></div>
-      NO TELEMETRY
-    </div>
     <span class="js-badge">JS ENGINE · NO BACKEND</span>
 
     <div class="header-clock" id="clock">--:--:-- UTC</div>
-    <div class="header-step" id="step-label">STEP —</div>
-    <div class="header-step" id="step-label">STEP 0000</div>
+    <div class="header-step"  id="step-label">STEP 0000</div>
+
   </header>
 
-  <!-- ── Sidebar ─────────────────────────────── -->
 
-  <!-- ── Sidebar ── -->
+  <!-- ═══════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════ -->
   <aside class="sidebar">
 
     <div class="sidebar-section">
       <div class="sidebar-label">Power · EPS</div>
+
       <div class="vital-card">
         <div class="vital-row">
           <span class="vital-name">Battery</span>
-          <span><span class="vital-value" id="sb-battery">—</span><span class="vital-unit">%</span></span>
-          <span><span class="vital-value" id="sb-battery">85.0</span><span class="vital-unit">%</span></span>
+          <span>
+            <span class="vital-value" id="sb-battery">85.0</span>
+            <span class="vital-unit">%</span>
+          </span>
         </div>
         <div class="vital-bar-track">
-          <div class="vital-bar-fill" id="sb-battery-bar" style="width:0%;background:var(--green)"></div>
-          <div class="vital-bar-fill" id="sb-battery-bar" style="width:85%;background:var(--green)"></div>
+          <div class="vital-bar-fill" id="sb-battery-bar"
+               style="width:85%; background:var(--green)"></div>
         </div>
       </div>
+
       <div class="vital-card">
-@@ -767,107 +661,92 @@
+        <div class="vital-row">
+          <span class="vital-name">Power Draw</span>
+          <span>
+            <span class="vital-value" id="sb-power">—</span>
+            <span class="vital-unit">W</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Thermal</div>
+
       <div class="vital-card">
         <div class="vital-row">
           <span class="vital-name">Temperature</span>
-          <span><span class="vital-value" id="sb-temp">—</span><span class="vital-unit">°C</span></span>
-          <span><span class="vital-value" id="sb-temp">22.0</span><span class="vital-unit">°C</span></span>
+          <span>
+            <span class="vital-value" id="sb-temp">22.0</span>
+            <span class="vital-unit">°C</span>
+          </span>
         </div>
         <div class="vital-bar-track">
-          <div class="vital-bar-fill" id="sb-temp-bar" style="width:0%;background:var(--blue)"></div>
-          <div class="vital-bar-fill" id="sb-temp-bar" style="width:50%;background:var(--amber)"></div>
+          <div class="vital-bar-fill" id="sb-temp-bar"
+               style="width:50%; background:var(--amber)"></div>
         </div>
       </div>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Subsystem Status</div>
-      <div class="vital-card" style="padding: 8px 12px;">
+
       <div class="vital-card" style="padding:8px 12px">
         <div class="status-row">
           <span class="status-label">EPS</span>
           <div class="status-indicator" id="st-eps">
             <div class="dot green"></div><span>Nominal</span>
           </div>
-          <div class="status-indicator" id="st-eps"><div class="dot green"></div><span>Nominal</span></div>
         </div>
         <div class="status-row">
           <span class="status-label">Thermal</span>
           <div class="status-indicator" id="st-thermal">
             <div class="dot green"></div><span>Nominal</span>
           </div>
-          <div class="status-indicator" id="st-thermal"><div class="dot green"></div><span>Nominal</span></div>
         </div>
         <div class="status-row">
           <span class="status-label">ADCS</span>
           <div class="status-indicator" id="st-adcs">
             <div class="dot green"></div><span>Nominal</span>
           </div>
-          <div class="status-indicator" id="st-adcs"><div class="dot green"></div><span>Nominal</span></div>
         </div>
         <div class="status-row">
           <span class="status-label">Comms</span>
           <div class="status-indicator" id="st-comms">
             <div class="dot green"></div><span>Nominal</span>
           </div>
-          <div class="status-indicator" id="st-comms"><div class="dot green"></div><span>Nominal</span></div>
         </div>
         <div class="status-row">
           <span class="status-label">Payload</span>
           <div class="status-indicator" id="st-payload">
             <div class="dot green"></div><span>Active</span>
           </div>
-          <div class="status-indicator" id="st-payload"><div class="dot green"></div><span>Active</span></div>
         </div>
       </div>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Orbit</div>
-      <div class="vital-card" style="padding: 8px 12px;">
+
       <div class="vital-card" style="padding:8px 12px">
         <div class="status-row">
           <span class="status-label">Orbit #</span>
-          <span class="status-indicator" style="font-family:var(--mono);font-size:12px" id="sb-orbit">—</span>
-          <span class="status-indicator" style="font-family:var(--mono);font-size:12px" id="sb-orbit">1</span>
+          <span class="status-indicator"
+                style="font-family:var(--mono);font-size:12px"
+                id="sb-orbit">1</span>
         </div>
         <div class="status-row">
           <span class="status-label">Sunlight</span>
           <div class="status-indicator" id="st-sun">
             <div class="dot green"></div><span>Illuminated</span>
           </div>
-          <div class="status-indicator" id="st-sun"><div class="dot green"></div><span>Illuminated</span></div>
         </div>
         <div class="status-row">
           <span class="status-label">Ground Cxn</span>
           <div class="status-indicator" id="st-ground">
             <div class="dot green"></div><span>Acquired</span>
           </div>
-          <div class="status-indicator" id="st-ground"><div class="dot green"></div><span>Acquired</span></div>
         </div>
       </div>
     </div>
 
   </aside>
 
-  <!-- ── Main ────────────────────────────────── -->
 
-  <!-- ── Main ── -->
+  <!-- ═══════════════════════════════════════════
+       MAIN
+  ═══════════════════════════════════════════ -->
   <main class="main">
 
-    <!-- Metric Row -->
+    <!-- Metric cards row -->
     <div class="metric-row">
+
       <div class="metric-card power">
         <div class="metric-label">Battery SOC</div>
-        <div class="metric-value" id="m-battery">—<span style="font-size:16px">%</span></div>
-        <div class="metric-value" id="m-battery">85.0<span style="font-size:16px">%</span></div>
+        <div class="metric-value" id="m-battery">
+          85.0<span style="font-size:16px">%</span>
+        </div>
         <div class="metric-sub" id="m-solar-status">Solar charging active</div>
       </div>
+
       <div class="metric-card thermal">
         <div class="metric-label">Temperature</div>
-        <div class="metric-value" id="m-temp">—<span style="font-size:16px">°C</span></div>
-        <div class="metric-value" id="m-temp">22.0<span style="font-size:16px">°C</span></div>
+        <div class="metric-value" id="m-temp">
+          22.0<span style="font-size:16px">°C</span>
+        </div>
         <div class="metric-sub" id="m-heater-status">Heater off</div>
       </div>
+
       <div class="metric-card comms">
         <div class="metric-label">Link Quality</div>
-        <div class="metric-value" id="m-link">—<span style="font-size:16px">%</span></div>
-        <div class="metric-value" id="m-link">92<span style="font-size:16px">%</span></div>
+        <div class="metric-value" id="m-link">
+          92<span style="font-size:16px">%</span>
+        </div>
         <div class="metric-sub" id="m-packets">↑0 ↓0 packets</div>
       </div>
+
       <div class="metric-card adcs">
         <div class="metric-label">Pointing Error</div>
-        <div class="metric-value" id="m-point">—<span style="font-size:14px">°</span></div>
-        <div class="metric-value" id="m-point">0.30<span style="font-size:14px">°</span></div>
+        <div class="metric-value" id="m-point">
+          0.30<span style="font-size:14px">°</span>
+        </div>
         <div class="metric-sub" id="m-adcs-status">Attitude stable</div>
       </div>
+
     </div>
 
-    <!-- Charts -->
+    <!-- Battery + Temperature charts -->
     <div class="charts-row">
+
       <div class="chart-card">
         <div class="chart-header">
           <span class="chart-title">Battery State of Charge</span>
-          <span class="chart-badge" id="chart-bat-latest">—%</span>
           <span class="chart-badge" id="chart-bat-latest">85.0%</span>
         </div>
         <div class="chart-canvas-wrap">
           <canvas id="chart-battery"></canvas>
-@@ -876,33 +755,33 @@
+        </div>
+      </div>
+
       <div class="chart-card">
         <div class="chart-header">
           <span class="chart-title">Spacecraft Temperature</span>
-          <span class="chart-badge" id="chart-temp-latest">— °C</span>
           <span class="chart-badge" id="chart-temp-latest">22.0 °C</span>
         </div>
         <div class="chart-canvas-wrap">
           <canvas id="chart-temp"></canvas>
         </div>
       </div>
+
     </div>
 
-    <!-- Orbit + Link -->
+    <!-- Orbit vis + Link quality chart -->
     <div class="charts-row">
+
       <div class="orbit-card">
         <div class="chart-header">
           <span class="chart-title">Orbital Position</span>
-          <span class="chart-badge" id="orbit-alt">550 km LEO</span>
           <span class="chart-badge">550 km LEO</span>
         </div>
         <div class="orbit-visual">
-          <div class="orbit-svg-wrap">
+
           <div style="flex-shrink:0">
             <svg width="120" height="120" viewBox="0 0 120 120">
               <!-- Earth -->
               <circle cx="60" cy="60" r="22" fill="#1D4ED8" opacity="0.15"/>
-              <circle cx="60" cy="60" r="22" fill="none" stroke="#1D4ED8" stroke-width="1" opacity="0.4"/>
-              <text x="60" y="64" text-anchor="middle" font-size="9" fill="#1D4ED8" opacity="0.8" font-family="IBM Plex Sans,sans-serif">Earth</text>
-              <!-- Orbit path -->
-              <!-- sunlit arc -->
-              <path id="sun-arc" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
-              <!-- eclipse arc -->
-              <path id="ecl-arc" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round"/>
-              <!-- orbit track -->
-              <circle cx="60" cy="60" r="44" fill="none" stroke="#BCC3CF" stroke-width="1" stroke-dasharray="3 3"/>
-              <!-- Shadow arc (eclipse zone) -->
-              <path id="shadow-arc" d="" fill="rgba(30,42,58,0.1)"/>
-              <!-- Satellite -->
-              <!-- spacecraft -->
+              <circle cx="60" cy="60" r="22" fill="none"
+                      stroke="#1D4ED8" stroke-width="1" opacity="0.4"/>
+              <text x="60" y="64" text-anchor="middle" font-size="9"
+                    fill="#1D4ED8" opacity="0.8"
+                    font-family="IBM Plex Sans,sans-serif">Earth</text>
+              <!-- Orbit track -->
+              <circle cx="60" cy="60" r="44" fill="none"
+                      stroke="#BCC3CF" stroke-width="1" stroke-dasharray="3 3"/>
+              <!-- Sunlit arc -->
+              <path id="sun-arc" fill="none"
+                    stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Eclipse arc -->
+              <path id="ecl-arc" fill="none"
+                    stroke="#374151" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Spacecraft -->
               <g id="sat-pos">
                 <circle r="5" fill="#0F1724"/>
-                <rect x="-8" y="-2" width="4" height="4" rx="0.5" fill="#0F1724" opacity="0.6"/>
-@@ -917,11 +796,11 @@
+                <rect x="-8" y="-2" width="4" height="4"
+                      rx="0.5" fill="#0F1724" opacity="0.6"/>
+                <rect x="4"  y="-2" width="4" height="4"
+                      rx="0.5" fill="#0F1724" opacity="0.6"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="orbit-stats">
+            <div class="orbit-stat">
+              <div class="orbit-stat-label">Altitude</div>
+              <div class="orbit-stat-value">550 km</div>
             </div>
             <div class="orbit-stat">
               <div class="orbit-stat-label">Period</div>
-              <div class="orbit-stat-value">48 min</div>
               <div class="orbit-stat-value">48 steps</div>
             </div>
             <div class="orbit-stat">
               <div class="orbit-stat-label">Orbit #</div>
-              <div class="orbit-stat-value" id="orb-num">—</div>
               <div class="orbit-stat-value" id="orb-num">1</div>
             </div>
             <div class="orbit-stat">
               <div class="orbit-stat-label">Eclipse</div>
-@@ -934,7 +813,7 @@
+              <div class="orbit-stat-value" id="orb-eclipse">—</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <div class="chart-card">
         <div class="chart-header">
           <span class="chart-title">Downlink Quality</span>
-          <span class="chart-badge" id="chart-link-latest">—%</span>
           <span class="chart-badge" id="chart-link-latest">92%</span>
         </div>
         <div class="chart-canvas-wrap">
           <canvas id="chart-link"></canvas>
-@@ -944,20 +823,18 @@
+        </div>
+      </div>
+
+    </div>
 
   </main>
 
-  <!-- ── Right Panel ─────────────────────────── -->
 
-  <!-- ── Right Panel ── -->
+  <!-- ═══════════════════════════════════════════
+       RIGHT PANEL
+  ═══════════════════════════════════════════ -->
   <aside class="right-panel">
 
+    <!-- Active faults -->
     <div class="panel-section">
       <div class="panel-title">Active Faults</div>
       <div class="fault-list" id="fault-list">
@@ -685,47 +905,39 @@
           <div class="dot green"></div>
           All systems nominal
         </div>
-        <div class="no-faults"><div class="dot green"></div>All systems nominal</div>
       </div>
     </div>
 
-    <div class="panel-section" style="flex:1; overflow-y:auto;">
-    <div class="panel-section" style="flex:1;overflow-y:auto">
+    <!-- Event log -->
+    <div class="panel-section" style="flex:1; overflow-y:auto">
       <div class="panel-title">Event Log</div>
       <div class="event-log" id="event-log"></div>
     </div>
-@@ -966,309 +843,685 @@
+
+    <!-- Ground commands -->
+    <div class="panel-section">
       <div class="panel-title">Ground Commands</div>
+
       <div class="controls">
         <button class="ctrl-btn" onclick="sendCmd('PAYLOAD_ON')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Enable Payload
           ✓ &nbsp;Enable Payload
         </button>
         <button class="ctrl-btn" onclick="sendCmd('PAYLOAD_OFF')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M4 4l4 4M8 4l-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Disable Payload
           ✕ &nbsp;Disable Payload
         </button>
         <button class="ctrl-btn" onclick="sendCmd('ENABLE_HEATER')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M3 4l3-3 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          Enable Heater
           ↑ &nbsp;Enable Heater
         </button>
         <button class="ctrl-btn" onclick="sendCmd('DISABLE_HEATER')">
           ↓ &nbsp;Disable Heater
         </button>
         <button class="ctrl-btn" onclick="sendCmd('STABILISE_ATTITUDE')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>
-          Stabilise Attitude
           ◎ &nbsp;Stabilise Attitude
         </button>
         <button class="ctrl-btn" onclick="sendCmd('ENABLE_CHARGING')">
           ⚡ &nbsp;Force Charge
         </button>
         <button class="ctrl-btn danger" onclick="sendCmd('ENTER_SAFE_MODE')">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L1 4v3c0 2.2 2.1 4.2 5 4.8 2.9-.6 5-2.6 5-4.8V4L6 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-          Force Safe Mode
           ⚠ &nbsp;Force Safe Mode
         </button>
         <button class="ctrl-btn" onclick="resetSim()">
@@ -733,96 +945,35 @@
         </button>
       </div>
 
+      <!-- Sim speed -->
       <div class="speed-row">
         <span class="speed-label">Sim speed</span>
         <div class="speed-btns">
-          <button class="speed-btn" onclick="setSpeed(3000)">0.3×</button>
-          <button class="speed-btn active" id="spd-1" onclick="setSpeed(1500)">1×</button>
-          <button class="speed-btn" onclick="setSpeed(500)">3×</button>
-          <button class="speed-btn" onclick="setSpeed(0)">⏸</button>
-          <button class="speed-btn" onclick="setSpeed(3000, this)">0.5×</button>
+          <button class="speed-btn"        onclick="setSpeed(3000, this)">0.5×</button>
           <button class="speed-btn active" onclick="setSpeed(1500, this)">1×</button>
-          <button class="speed-btn" onclick="setSpeed(500, this)">3×</button>
-          <button class="speed-btn" onclick="setSpeed(150, this)">10×</button>
+          <button class="speed-btn"        onclick="setSpeed(500,  this)">3×</button>
+          <button class="speed-btn"        onclick="setSpeed(150,  this)">10×</button>
         </div>
       </div>
+
     </div>
 
   </aside>
 
-</div>
 </div><!-- /shell -->
 
-<!-- Chart.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+<!-- Chart.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
-const API = "http://127.0.0.1:8000";
-let simInterval = null;
-let simSpeed = 1500;
-let isPaused = false;
-let lastStep = 0;
-
-// ── Clock ──────────────────────────────────────────────────────────────────
-function tickClock() {
-  const now = new Date();
-  const h = String(now.getUTCHours()).padStart(2,'0');
-  const m = String(now.getUTCMinutes()).padStart(2,'0');
-  const s = String(now.getUTCSeconds()).padStart(2,'0');
-  document.getElementById('clock').textContent = `${h}:${m}:${s} UTC`;
-}
-setInterval(tickClock, 1000);
-tickClock();
-
-// ── Charts ─────────────────────────────────────────────────────────────────
-function makeChart(id, color, yMin, yMax, label) {
-  const ctx = document.getElementById(id).getContext('2d');
-  return new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        data: [],
-        borderColor: color,
-        borderWidth: 1.5,
-        pointRadius: 0,
-        fill: true,
-        backgroundColor: color + '18',
-        tension: 0.35,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 200 },
-      plugins: { legend: { display: false }, tooltip: {
-        callbacks: { label: (c) => `${c.parsed.y.toFixed(1)} ${label}` }
-      }},
-      scales: {
-        x: {
-          display: false,
-          ticks: { display: false },
-          grid: { display: false }
-        },
-        y: {
-          min: yMin,
-          max: yMax,
-          ticks: {
-            font: { family: 'IBM Plex Mono', size: 10 },
-            color: '#8896A8',
-            maxTicksLimit: 4,
-          },
-          grid: { color: '#DDE1E9', lineWidth: 0.5 }
-        }
-
-  /* =============================================================
+  /* ═══════════════════════════════════════════════════════════════
      SIMULATION ENGINE
-     Replicates Python files exactly:
-       config.py · spacecraft.py · lifecycle.py
-       fdir.py · schedular.py
-  ============================================================= */
+     Exact JS translation of:
+       config.py · spacecraft.py · lifecycle.py · fdir.py · schedular.py
+  ═══════════════════════════════════════════════════════════════ */
 
-  /* ── config.py ─────────────────────────────────────────────── */
+  /* ── config.py ─────────────────────────────────────────── */
   const CFG = {
     SATELLITE_NAME:           'AETHER-1',
     MISSION_ID:               'AX-2024-001',
@@ -849,48 +1000,53 @@ function makeChart(id, color, yMin, yMax, label) {
     SUNLIGHT_FRACTION:         0.65,
   };
 
-  /* ── FAULT_DEFS (fdir.py) ───────────────────────────────────── */
+  /* ── FAULT_DEFS (fdir.py) ──────────────────────────────── */
   const FAULT_DEFS = {
     LOW_BATTERY:      { sub:'EPS',     sev:'warning',  desc:'Battery below minimum threshold' },
-    CRITICAL_BATTERY: { sub:'EPS',     sev:'critical', desc:'Imminent power loss – emergency action' },
+    CRITICAL_BATTERY: { sub:'EPS',     sev:'critical', desc:'Imminent power loss — emergency action' },
     HIGH_TEMP:        { sub:'THERMAL', sev:'warning',  desc:'Temperature exceeding safe operating range' },
     LOW_TEMP:         { sub:'THERMAL', sev:'warning',  desc:'Temperature below cold survival limit' },
     ATTITUDE_FAULT:   { sub:'ADCS',    sev:'warning',  desc:'Pointing error exceeds 1.5°' },
     COMMS_DEGRADED:   { sub:'COMMS',   sev:'caution',  desc:'Downlink quality below threshold' },
   };
 
-  /* ── Spacecraft state (spacecraft.py) ───────────────────────── */
+  /* ── spacecraft state (spacecraft.py) ──────────────────── */
   function makeSC() {
     return {
-      mode:               'NOMINAL',
-      battery:            85.0,
-      solarArrayActive:   true,
-      powerDrawW:         0,
-      temperature:        22.0,
-      heaterOn:           false,
-      payloadOn:          true,
-      payloadDutyCycle:   1.0,
-      attitudeStable:     true,
-      pointingErrorDeg:   0.3,
-      inGroundContact:    true,
-      commsAvailable:     true,
-      linkQuality:        92.0,
-      uplinkPackets:      0,
-      downlinkPackets:    0,
-      orbitStep:          0,
-      inSunlight:         true,
-      eclipseDuration:    0,
-      orbitNumber:        1,
-      activeFaults:       new Set(),
+      mode:                 'NOMINAL',
+      battery:              85.0,
+      solarArrayActive:     true,
+      powerDrawW:           0,
+      temperature:          22.0,
+      heaterOn:             false,
+      payloadOn:            true,
+      payloadDutyCycle:     1.0,
+      attitudeStable:       true,
+      pointingErrorDeg:     0.3,
+      inGroundContact:      true,
+      commsAvailable:       true,
+      linkQuality:          92.0,
+      uplinkPackets:        0,
+      downlinkPackets:      0,
+      orbitStep:            0,
+      inSunlight:           true,
+      eclipseDuration:      0,
+      orbitNumber:          1,
+      activeFaults:         new Set(),
       preFaultPayloadState: null,
-      history: { battery:[], temperature:[], linkQuality:[], pointingError:[] },
-      totalSteps:   0,
-      totalFaults:  0,
-      uptimeSteps:  0,
+      history: {
+        battery:      [],
+        temperature:  [],
+        linkQuality:  [],
+        pointingError:[]
+      },
+      totalSteps:  0,
+      totalFaults: 0,
+      uptimeSteps: 0,
     };
   }
 
-  /* ── update_orbit (spacecraft.py) ───────────────────────────── */
+  /* ── update_orbit (spacecraft.py) ──────────────────────── */
   function updateOrbit(sc) {
     sc.orbitStep = (sc.orbitStep + 1) % CFG.ORBIT_PERIOD_STEPS;
     const phase   = sc.orbitStep / CFG.ORBIT_PERIOD_STEPS;
@@ -904,10 +1060,10 @@ function makeChart(id, color, yMin, yMax, label) {
 
     sc.inGroundContact = phase < 0.20 || (phase > 0.55 && phase < 0.65);
 
-    return prevSun !== sc.inSunlight;   /* true on day/night transition */
+    return prevSun !== sc.inSunlight;   /* true on sunlight/eclipse transition */
   }
 
-  /* ── lifecycle update (lifecycle.py) ────────────────────────── */
+  /* ── lifecycle update (lifecycle.py) ───────────────────── */
   function lifecycleUpdate(sc) {
     sc.totalSteps += 1;
     if (sc.mode === 'NOMINAL') sc.uptimeSteps += 1;
@@ -925,8 +1081,11 @@ function makeChart(id, color, yMin, yMax, label) {
       if (transition) solar *= 0.5;
     }
 
-    sc.battery = Math.max(CFG.BATTERY_MIN,
-                 Math.min(CFG.BATTERY_MAX, sc.battery + solar - drain));
+    sc.battery = Math.max(
+      CFG.BATTERY_MIN,
+      Math.min(CFG.BATTERY_MAX, sc.battery + solar - drain)
+    );
+
     sc.powerDrawW = drain * (CFG.BATTERY_CAPACITY_WH / 100) * 60;
 
     /* Thermal model */
@@ -940,7 +1099,7 @@ function makeChart(id, color, yMin, yMax, label) {
 
     if (sc.heaterOn) sc.temperature += 1.2;
 
-    /* ±0.2°C thermal noise */
+    /* ±0.2 °C random thermal noise */
     sc.temperature += (Math.random() - 0.5) * 0.4;
     sc.temperature = Math.max(CFG.TEMP_MIN, Math.min(CFG.TEMP_MAX, sc.temperature));
 
@@ -962,17 +1121,12 @@ function makeChart(id, color, yMin, yMax, label) {
     } else {
       sc.linkQuality = Math.max(0, sc.linkQuality - 5);
     }
-  });
-}
 
-const chartBattery = makeChart('chart-battery', '#F59E0B',   0, 100, '%');
-const chartTemp    = makeChart('chart-temp',    '#EF4444', -20,  80, '°C');
-const chartLink    = makeChart('chart-link',    '#3B82F6',   0, 100, '%');
-    /* History (keep last 50) */
+    /* History — keep last 50 readings */
     for (const [k, v] of [
-      ['battery', sc.battery],
-      ['temperature', sc.temperature],
-      ['linkQuality', sc.linkQuality],
+      ['battery',       sc.battery],
+      ['temperature',   sc.temperature],
+      ['linkQuality',   sc.linkQuality],
       ['pointingError', sc.pointingErrorDeg],
     ]) {
       sc.history[k].push(parseFloat(v.toFixed(2)));
@@ -980,89 +1134,36 @@ const chartLink    = makeChart('chart-link',    '#3B82F6',   0, 100, '%');
     }
   }
 
-function pushChart(chart, value, maxPoints = 50) {
-  chart.data.labels.push('');
-  chart.data.datasets[0].data.push(value);
-  if (chart.data.labels.length > maxPoints) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
-  /* ── detect_faults (fdir.py) ────────────────────────────────── */
+  /* ── detect_faults (fdir.py) ────────────────────────────── */
   function detectFaults(sc) {
     const faults = [];
 
     function check(cond, key) {
       if (cond && !sc.activeFaults.has(key)) {
-        faults.push({ type:key, ...FAULT_DEFS[key] });
+        faults.push({ type: key, ...FAULT_DEFS[key] });
         sc.activeFaults.add(key);
       }
     }
 
-    check(sc.battery < CFG.POWER_CRITICAL_THRESHOLD,                                 'CRITICAL_BATTERY');
+    check(sc.battery < CFG.POWER_CRITICAL_THRESHOLD,                         'CRITICAL_BATTERY');
     check(sc.battery >= CFG.POWER_CRITICAL_THRESHOLD &&
-          sc.battery <  CFG.POWER_LOW_THRESHOLD,                                      'LOW_BATTERY');
-    check(sc.temperature > CFG.TEMP_FAULT_HIGH,                                       'HIGH_TEMP');
-    check(sc.temperature < CFG.TEMP_FAULT_LOW,                                        'LOW_TEMP');
-    check(sc.pointingErrorDeg > 1.5,                                                  'ATTITUDE_FAULT');
-    check(sc.inGroundContact && sc.linkQuality < 50,                                  'COMMS_DEGRADED');
+          sc.battery <  CFG.POWER_LOW_THRESHOLD,                              'LOW_BATTERY');
+    check(sc.temperature > CFG.TEMP_FAULT_HIGH,                               'HIGH_TEMP');
+    check(sc.temperature < CFG.TEMP_FAULT_LOW,                                'LOW_TEMP');
+    check(sc.pointingErrorDeg > 1.5,                                          'ATTITUDE_FAULT');
+    check(sc.inGroundContact && sc.linkQuality < 50,                          'COMMS_DEGRADED');
 
     if (faults.length) sc.totalFaults += faults.length;
     return faults;
   }
-  chart.update();
-}
 
-// ── Orbit Visualisation ────────────────────────────────────────────────────
-function updateOrbitVis(orbitStep, orbitPeriod, inSunlight) {
-  const angle = (orbitStep / orbitPeriod) * 2 * Math.PI - Math.PI / 2;
-  const R = 44, cx = 60, cy = 60;
-  const sx = cx + R * Math.cos(angle);
-  const sy = cy + R * Math.sin(angle);
-
-  const satG = document.getElementById('sat-pos');
-  satG.setAttribute('transform', `translate(${sx.toFixed(1)}, ${sy.toFixed(1)})`);
-}
-
-// ── Status Helpers ─────────────────────────────────────────────────────────
-function setStatus(id, good, label, dotClass) {
-  const el = document.getElementById(id);
-  el.innerHTML = `<div class="dot ${dotClass || (good ? 'green' : 'red')}"></div><span>${label}</span>`;
-}
-
-function setBatBar(pct) {
-  const bar = document.getElementById('sb-battery-bar');
-  bar.style.width = pct + '%';
-  bar.style.background = pct < 15 ? '#EF4444' : pct < 30 ? '#F59E0B' : '#10B981';
-}
-
-function setTempBar(temp) {
-  const bar = document.getElementById('sb-temp-bar');
-  const pct = Math.max(0, Math.min(100, ((temp + 20) / 100) * 100));
-  bar.style.width = pct + '%';
-  bar.style.background = temp > 45 ? '#EF4444' : temp < -10 ? '#3B82F6' : '#F59E0B';
-}
-
-function setModeBadge(mode) {
-  const badge = document.getElementById('mode-badge');
-  const text  = document.getElementById('mode-text');
-  badge.className = 'mode-badge ' + mode.toLowerCase();
-  text.textContent = mode;
-}
-
-// ── Fault Rendering ────────────────────────────────────────────────────────
-function renderFaults(activeFaults) {
-  const list = document.getElementById('fault-list');
-
-  if (!activeFaults || activeFaults.length === 0) {
-    list.innerHTML = `<div class="no-faults"><div class="dot green"></div>All systems nominal</div>`;
-    return;
-
-  /* ── isolate_faults (fdir.py) ───────────────────────────────── */
+  /* ── isolate_faults (fdir.py) ───────────────────────────── */
   function isolateFaults(sc, faults) {
     const actions = [];
     const sevs    = new Set(faults.map(f => f.sev));
 
     for (const f of faults) {
-      if (['LOW_BATTERY','CRITICAL_BATTERY','HIGH_TEMP'].includes(f.type)) {
+      if (['LOW_BATTERY', 'CRITICAL_BATTERY', 'HIGH_TEMP'].includes(f.type)) {
         if (!actions.includes('PAYLOAD_OFF')) actions.push('PAYLOAD_OFF');
       }
       if (f.type === 'LOW_TEMP')       actions.push('ENABLE_HEATER');
@@ -1078,36 +1179,21 @@ function renderFaults(activeFaults) {
     return actions;
   }
 
-  const severityMap = {
-    CRITICAL_BATTERY: { sev: 'critical', sub: 'EPS' },
-    LOW_BATTERY:      { sev: 'warning',  sub: 'EPS' },
-    HIGH_TEMP:        { sev: 'warning',  sub: 'THERMAL' },
-    LOW_TEMP:         { sev: 'warning',  sub: 'THERMAL' },
-    ATTITUDE_FAULT:   { sev: 'warning',  sub: 'ADCS' },
-    COMMS_DEGRADED:   { sev: 'caution',  sub: 'COMMS' },
-  };
-  /* ── recover_faults (fdir.py) ───────────────────────────────── */
+  /* ── recover_faults (fdir.py) ───────────────────────────── */
   function recoverFaults(sc, faults) {
     const actions = [];
     for (const f of faults) {
-      if (['LOW_BATTERY','CRITICAL_BATTERY'].includes(f.type)) actions.push('ENABLE_CHARGING');
+      if (['LOW_BATTERY', 'CRITICAL_BATTERY'].includes(f.type)) actions.push('ENABLE_CHARGING');
       if (f.type === 'HIGH_TEMP') actions.push('REDUCE_THERMAL_LOAD');
       if (f.type === 'LOW_TEMP')  actions.push('ENABLE_HEATER');
     }
     return actions;
   }
 
-  const descMap = {
-    CRITICAL_BATTERY: 'Imminent power loss – emergency action',
-    LOW_BATTERY:      'Battery below minimum threshold',
-    HIGH_TEMP:        'Temperature exceeding safe operating range',
-    LOW_TEMP:         'Temperature below cold survival limit',
-    ATTITUDE_FAULT:   'Pointing error exceeds threshold',
-    COMMS_DEGRADED:   'Downlink quality degraded',
-  };
-  /* ── recovery_complete (fdir.py) ────────────────────────────── */
+  /* ── recovery_complete (fdir.py) ────────────────────────── */
   function recoveryComplete(sc) {
     const resolved = new Set();
+
     if (sc.activeFaults.has('CRITICAL_BATTERY') && sc.battery > CFG.POWER_LOW_THRESHOLD)
       resolved.add('CRITICAL_BATTERY');
     if (sc.activeFaults.has('LOW_BATTERY') && sc.battery > CFG.POWER_RECOVER_THRESHOLD)
@@ -1120,101 +1206,11 @@ function renderFaults(activeFaults) {
       resolved.add('ATTITUDE_FAULT');
     if (sc.activeFaults.has('COMMS_DEGRADED') && sc.linkQuality > 65)
       resolved.add('COMMS_DEGRADED');
+
     return resolved;
   }
 
-  list.innerHTML = activeFaults.map(ft => {
-    const info = severityMap[ft] || { sev: 'warning', sub: 'UNK' };
-    return `
-      <div class="fault-item ${info.sev}">
-        <div>
-          <div class="fault-severity ${info.sev}">${info.sev}</div>
-          <div class="fault-type">${ft}</div>
-          <div class="fault-desc">${descMap[ft] || ''}</div>
-        </div>
-        <div class="fault-sub" style="margin-left:auto;padding-top:2px">${info.sub}</div>
-      </div>`;
-  }).join('');
-}
-
-// ── Event Log Rendering ────────────────────────────────────────────────────
-function renderEvents(events) {
-  const log = document.getElementById('event-log');
-  log.innerHTML = [...events].reverse().map(e => `
-    <div class="event-item">
-      <span class="event-step">${e.step}</span>
-      <span class="event-kind ${e.kind}">${e.kind}</span>
-      <span class="event-detail">${e.detail}</span>
-    </div>`).join('');
-}
-
-// ── Main Update ────────────────────────────────────────────────────────────
-async function stepSim() {
-  try {
-    const res = await fetch(`${API}/step`);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const t = data.telemetry;
-
-    document.getElementById('conn-error').classList.remove('visible');
-
-    // Header
-    document.getElementById('step-label').textContent = `STEP ${data.step}`;
-    setModeBadge(data.mode);
-
-    // Sidebar vitals
-    document.getElementById('sb-battery').textContent = t.battery.toFixed(1);
-    document.getElementById('sb-power').textContent   = t.power_draw_w.toFixed(2);
-    document.getElementById('sb-temp').textContent    = t.temperature.toFixed(1);
-    document.getElementById('sb-orbit').textContent   = `#${t.orbit_number}`;
-    setBatBar(t.battery);
-    setTempBar(t.temperature);
-
-    // Metric cards
-    document.getElementById('m-battery').innerHTML = `${t.battery.toFixed(1)}<span style="font-size:16px">%</span>`;
-    document.getElementById('m-temp').innerHTML    = `${t.temperature.toFixed(1)}<span style="font-size:16px">°C</span>`;
-    document.getElementById('m-link').innerHTML    = `${t.link_quality.toFixed(0)}<span style="font-size:16px">%</span>`;
-    document.getElementById('m-point').innerHTML   = `${t.pointing_error_deg.toFixed(2)}<span style="font-size:14px">°</span>`;
-
-    document.getElementById('m-solar-status').textContent   = t.solar_charging ? 'Solar charging active' : 'Eclipse – battery draining';
-    document.getElementById('m-heater-status').textContent  = t.heater_on ? 'Heater active' : 'Heater off';
-    document.getElementById('m-packets').textContent        = `↑${t.uplink_packets}  ↓${t.downlink_packets} packets`;
-    document.getElementById('m-adcs-status').textContent    = t.attitude_stable ? 'Attitude stable' : 'Attitude unstable';
-
-    // Charts
-    pushChart(chartBattery, t.battery);
-    pushChart(chartTemp,    t.temperature);
-    pushChart(chartLink,    t.link_quality);
-
-    document.getElementById('chart-bat-latest').textContent  = t.battery.toFixed(1) + '%';
-    document.getElementById('chart-temp-latest').textContent = t.temperature.toFixed(1) + ' °C';
-    document.getElementById('chart-link-latest').textContent = t.link_quality.toFixed(0) + '%';
-
-    // Orbit vis
-    updateOrbitVis(data.telemetry.orbit_number % 48, 48, t.in_sunlight);
-    document.getElementById('orb-num').textContent     = t.orbit_number;
-    document.getElementById('orb-eclipse').textContent = t.in_sunlight ? '0 steps' : `${t.eclipse_duration} step${t.eclipse_duration !== 1 ? 's' : ''}`;
-
-    // Status indicators
-    const battOk = t.battery >= 20;
-    const tempOk = t.temperature > -15 && t.temperature < 50;
-    setStatus('st-eps',     battOk, battOk ? 'Nominal' : 'Fault',    battOk ? 'green' : 'red');
-    setStatus('st-thermal', tempOk, tempOk ? 'Nominal' : 'Fault',    tempOk ? 'green' : 'red');
-    setStatus('st-adcs',    t.attitude_stable, t.attitude_stable ? 'Nominal' : 'Unstable',  t.attitude_stable ? 'green' : 'amber');
-    const commsOk = t.link_quality > 50 || !t.in_ground_contact;
-    setStatus('st-comms',   commsOk, t.in_ground_contact ? (commsOk ? 'Acquired' : 'Degraded') : 'Out of range', t.in_ground_contact ? (commsOk ? 'green' : 'amber') : 'grey');
-    setStatus('st-payload', t.payload_on, t.payload_on ? 'Active' : 'Off', t.payload_on ? 'green' : 'grey');
-    setStatus('st-sun',     t.in_sunlight, t.in_sunlight ? 'Illuminated' : 'Eclipse', t.in_sunlight ? 'green' : 'grey');
-    setStatus('st-ground',  t.in_ground_contact, t.in_ground_contact ? 'Acquired' : 'Out of range', t.in_ground_contact ? 'green' : 'grey');
-
-    // Faults & Events
-    renderFaults(data.active_faults);
-    if (data.events) renderEvents(data.events);
-
-  } catch (e) {
-    document.getElementById('conn-error').classList.add('visible');
-    console.error('API error:', e);
-  /* ── execute command (spacecraft.py) ────────────────────────── */
+  /* ── execute command (spacecraft.py) ───────────────────── */
   function execute(sc, cmd) {
     switch (cmd) {
       case 'ENTER_SAFE_MODE':
@@ -1222,21 +1218,33 @@ async function stepSim() {
         if (sc.preFaultPayloadState === null) sc.preFaultPayloadState = sc.payloadOn;
         sc.payloadOn = false;
         break;
-      case 'EXIT_SAFE_MODE':    sc.mode = 'NOMINAL'; break;
+      case 'EXIT_SAFE_MODE':
+        sc.mode = 'NOMINAL';
+        break;
       case 'ENTER_EMERGENCY':
         sc.mode = 'EMERGENCY';
         if (sc.preFaultPayloadState === null) sc.preFaultPayloadState = sc.payloadOn;
         sc.payloadOn = false;
         break;
-      case 'EXIT_EMERGENCY':    sc.mode = 'NOMINAL'; break;
-      case 'PAYLOAD_OFF':       sc.payloadOn = false; break;
-      case 'PAYLOAD_ON':        sc.payloadOn = true;  break;
+      case 'EXIT_EMERGENCY':
+        sc.mode = 'NOMINAL';
+        break;
+      case 'PAYLOAD_OFF':
+        sc.payloadOn = false;
+        break;
+      case 'PAYLOAD_ON':
+        sc.payloadOn = true;
+        break;
       case 'ENABLE_CHARGING':
         if (sc.inSunlight && sc.solarArrayActive)
           sc.battery = Math.min(CFG.BATTERY_MAX, sc.battery + 8);
         break;
-      case 'ENABLE_HEATER':     sc.heaterOn = true;  break;
-      case 'DISABLE_HEATER':    sc.heaterOn = false; break;
+      case 'ENABLE_HEATER':
+        sc.heaterOn = true;
+        break;
+      case 'DISABLE_HEATER':
+        sc.heaterOn = false;
+        break;
       case 'REDUCE_THERMAL_LOAD':
         sc.temperature = Math.max(CFG.TEMP_MIN, sc.temperature - 5);
         break;
@@ -1246,12 +1254,13 @@ async function stepSim() {
     }
   }
 
-  /* ── schedule (schedular.py) ────────────────────────────────── */
+  /* ── schedule (schedular.py) ─────────────────────────────── */
   function schedule(sc) {
     const cmds = [];
     if (sc.mode === 'NOMINAL') {
       if (sc.battery > 60 && sc.inSunlight &&
-          sc.temperature > CFG.TEMP_FAULT_LOW && sc.temperature < CFG.TEMP_FAULT_HIGH) {
+          sc.temperature > CFG.TEMP_FAULT_LOW &&
+          sc.temperature < CFG.TEMP_FAULT_HIGH) {
         cmds.push('PAYLOAD_ON');
       } else if (sc.battery < CFG.POWER_LOW_THRESHOLD ||
                  sc.temperature >= CFG.TEMP_FAULT_HIGH) {
@@ -1263,9 +1272,9 @@ async function stepSim() {
   }
 
 
-  /* =============================================================
+  /* ═══════════════════════════════════════════════════════════════
      SIMULATION LOOP
-  ============================================================= */
+  ═══════════════════════════════════════════════════════════════ */
   let sc          = makeSC();
   let stepCounter = 0;
   let eventLog    = [{ step:0, kind:'NOMINAL', detail:'Simulation initialised — JS engine active' }];
@@ -1277,19 +1286,14 @@ async function stepSim() {
     eventLog.push({ step, kind, detail });
     if (eventLog.length > 100) eventLog.shift();
   }
-}
 
-// ── Sim Speed Control ──────────────────────────────────────────────────────
-function setSpeed(ms) {
-  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
   function simStep() {
     stepCounter += 1;
-    metSeconds  += 60;
+    metSeconds  += 60;   /* 1 step = 1 simulation minute */
 
     lifecycleUpdate(sc);
 
-    /* Scheduler */
+    /* Autonomous scheduler */
     for (const c of schedule(sc)) execute(sc, c);
 
     /* FDIR — detect */
@@ -1310,6 +1314,7 @@ function setSpeed(ms) {
     /* FDIR — resolution check */
     if (sc.mode === 'SAFE' || sc.mode === 'EMERGENCY') {
       const resolved = recoveryComplete(sc);
+
       for (const r of resolved) {
         sc.activeFaults.delete(r);
         logEvent(stepCounter, 'RESOLVED', r);
@@ -1333,12 +1338,11 @@ function setSpeed(ms) {
       }
     }
 
-    /* Orbit transition log */
+    /* Orbit start log */
     if (sc.orbitStep === 1) {
       logEvent(stepCounter, 'ORBIT', `Orbit #${sc.orbitNumber} started`);
     }
 
-  if (simInterval) clearInterval(simInterval);
     updateUI();
   }
 
@@ -1347,26 +1351,12 @@ function setSpeed(ms) {
     simInterval = setInterval(simStep, simSpeed);
   }
 
-  if (ms === 0) {
-    isPaused = true;
-  } else {
-    isPaused = false;
   function setSpeed(ms, btn) {
     simSpeed = ms;
-    simInterval = setInterval(stepSim, simSpeed);
     document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
     startLoop();
   }
-}
-
-// ── Commands ───────────────────────────────────────────────────────────────
-async function sendCmd(cmd) {
-  try {
-    await fetch(`${API}/command/${cmd}`, { method: 'POST' });
-    await stepSim(); // immediate refresh
-  } catch(e) {
-    console.error('Command failed:', e);
 
   function sendCmd(cmd) {
     execute(sc, cmd);
@@ -1380,28 +1370,20 @@ async function sendCmd(cmd) {
     metSeconds  = 0;
     eventLog    = [{ step:0, kind:'NOMINAL', detail:'Simulation reset' }];
 
-    /* Clear chart data */
-    chartBattery.data.labels   = [];
-    chartBattery.data.datasets[0].data = [];
-    chartTemp.data.labels      = [];
-    chartTemp.data.datasets[0].data = [];
-    chartLink.data.labels      = [];
-    chartLink.data.datasets[0].data = [];
-    chartBattery.update();
-    chartTemp.update();
-    chartLink.update();
+    /* Clear charts */
+    [chartBattery, chartTemp, chartLink].forEach(ch => {
+      ch.data.labels = [];
+      ch.data.datasets[0].data = [];
+      ch.update();
+    });
 
     updateUI();
   }
-}
 
-// ── Start ──────────────────────────────────────────────────────────────────
-simInterval = setInterval(stepSim, simSpeed);
-stepSim(); // immediate first fetch
 
-  /* =============================================================
-     CHARTS  (Chart.js)
-  ============================================================= */
+  /* ═══════════════════════════════════════════════════════════════
+     CHARTS  (Chart.js 4)
+  ═══════════════════════════════════════════════════════════════ */
   function makeChart(id, color, yMin, yMax, unit) {
     const ctx = document.getElementById(id).getContext('2d');
     return new Chart(ctx, {
@@ -1425,13 +1407,16 @@ stepSim(); // immediate first fetch
         plugins: {
           legend: { display: false },
           tooltip: {
-            callbacks: { label: c => `${c.parsed.y.toFixed(1)} ${unit}` }
+            callbacks: {
+              label: c => `${c.parsed.y.toFixed(1)} ${unit}`
+            }
           }
         },
         scales: {
           x: { display: false, grid: { display: false } },
           y: {
-            min: yMin, max: yMax,
+            min: yMin,
+            max: yMax,
             ticks: {
               font: { family: 'IBM Plex Mono', size: 10 },
               color: '#8896A8',
@@ -1459,9 +1444,9 @@ stepSim(); // immediate first fetch
   }
 
 
-  /* =============================================================
+  /* ═══════════════════════════════════════════════════════════════
      UI UPDATE
-  ============================================================= */
+  ═══════════════════════════════════════════════════════════════ */
   function setStatus(id, dotClass, label) {
     document.getElementById(id).innerHTML =
       `<div class="dot ${dotClass}"></div><span>${label}</span>`;
@@ -1474,6 +1459,7 @@ stepSim(); // immediate first fetch
   }
 
   function updateUI() {
+
     /* Header */
     document.getElementById('step-label').textContent =
       'STEP ' + String(stepCounter).padStart(4, '0');
@@ -1498,17 +1484,21 @@ stepSim(); // immediate first fetch
     /* Sidebar — orbit */
     document.getElementById('sb-orbit').textContent = '#' + sc.orbitNumber;
 
-    /* Subsystem status indicators */
-    const battOk  = sc.battery >= CFG.POWER_LOW_THRESHOLD;
-    const tempOk  = sc.temperature > CFG.TEMP_FAULT_LOW && sc.temperature < CFG.TEMP_FAULT_HIGH;
+    /* Subsystem status dots */
+    const battOk  = sc.battery  >= CFG.POWER_LOW_THRESHOLD;
+    const tempOk  = sc.temperature > CFG.TEMP_FAULT_LOW &&
+                    sc.temperature < CFG.TEMP_FAULT_HIGH;
     const commsOk = sc.linkQuality > 50 || !sc.inGroundContact;
 
-    setStatus('st-eps',     battOk ? 'green' : 'red',   battOk ? 'Nominal' : 'Fault');
-    setStatus('st-thermal', tempOk ? 'green' : 'red',   tempOk ? 'Nominal' : 'Fault');
+    setStatus('st-eps',     battOk ? 'green' : 'red',
+                            battOk ? 'Nominal' : 'Fault');
+    setStatus('st-thermal', tempOk ? 'green' : 'red',
+                            tempOk ? 'Nominal' : 'Fault');
     setStatus('st-adcs',    sc.attitudeStable ? 'green' : 'amber',
                             sc.attitudeStable ? 'Nominal' : 'Unstable');
-    setStatus('st-comms',   sc.inGroundContact ? (commsOk ? 'green' : 'amber') : 'grey',
-                            sc.inGroundContact ? (commsOk ? 'Acquired' : 'Degraded') : 'Out of range');
+    setStatus('st-comms',
+      sc.inGroundContact ? (commsOk ? 'green' : 'amber') : 'grey',
+      sc.inGroundContact ? (commsOk ? 'Acquired' : 'Degraded') : 'Out of range');
     setStatus('st-payload', sc.payloadOn ? 'green' : 'grey',
                             sc.payloadOn ? 'Active' : 'Off');
     setStatus('st-sun',     sc.inSunlight ? 'green' : 'grey',
@@ -1527,7 +1517,9 @@ stepSim(); // immediate first fetch
       `${sc.pointingErrorDeg.toFixed(2)}<span style="font-size:14px">°</span>`;
 
     document.getElementById('m-solar-status').textContent =
-      (sc.inSunlight && sc.solarArrayActive) ? 'Solar charging active' : 'Eclipse — battery draining';
+      (sc.inSunlight && sc.solarArrayActive)
+        ? 'Solar charging active'
+        : 'Eclipse — battery draining';
     document.getElementById('m-heater-status').textContent =
       sc.heaterOn ? 'Heater active' : 'Heater off';
     document.getElementById('m-packets').textContent =
@@ -1544,37 +1536,37 @@ stepSim(); // immediate first fetch
     document.getElementById('chart-temp-latest').textContent = sc.temperature.toFixed(1) + ' °C';
     document.getElementById('chart-link-latest').textContent = sc.linkQuality.toFixed(0) + '%';
 
-    /* Orbit visualisation */
+    /* Orbit SVG */
     updateOrbitVis();
 
     document.getElementById('orb-num').textContent =
       sc.orbitNumber;
     document.getElementById('orb-eclipse').textContent =
-      sc.inSunlight ? '—' : `${sc.eclipseDuration} step${sc.eclipseDuration !== 1 ? 's' : ''}`;
+      sc.inSunlight
+        ? '—'
+        : `${sc.eclipseDuration} step${sc.eclipseDuration !== 1 ? 's' : ''}`;
 
-    /* Active faults */
+    /* Faults + events */
     renderFaults();
-
-    /* Event log */
     renderEventLog();
   }
 
-  /* ── Orbit SVG ──────────────────────────────────────────────── */
+  /* ── Orbit SVG ──────────────────────────────────────────── */
   function updateOrbitVis() {
-    const R  = 44;
-    const cx = 60;
-    const cy = 60;
+    const R     = 44;
+    const cx    = 60;
+    const cy    = 60;
     const STEPS = CFG.ORBIT_PERIOD_STEPS;
     const SUN   = CFG.SUNLIGHT_FRACTION;
 
-    /* Spacecraft position */
+    /* Spacecraft dot position */
     const angle = (sc.orbitStep / STEPS) * 2 * Math.PI - Math.PI / 2;
     const sx    = cx + R * Math.cos(angle);
     const sy    = cy + R * Math.sin(angle);
     document.getElementById('sat-pos').setAttribute('transform',
       `translate(${sx.toFixed(1)},${sy.toFixed(1)})`);
 
-    /* Arc helper */
+    /* Arc path helper */
     function arcD(startFrac, endFrac) {
       const a1 = startFrac * 2 * Math.PI - Math.PI / 2;
       const a2 = endFrac   * 2 * Math.PI - Math.PI / 2;
@@ -1590,13 +1582,16 @@ stepSim(); // immediate first fetch
     document.getElementById('ecl-arc').setAttribute('d', arcD(SUN, 1));
   }
 
-  /* ── Fault list ─────────────────────────────────────────────── */
+  /* ── Fault list ─────────────────────────────────────────── */
   function renderFaults() {
     const list = document.getElementById('fault-list');
 
     if (sc.activeFaults.size === 0) {
       list.innerHTML =
-        `<div class="no-faults"><div class="dot green"></div>All systems nominal</div>`;
+        `<div class="no-faults">
+           <div class="dot green"></div>
+           All systems nominal
+         </div>`;
       return;
     }
 
@@ -1614,7 +1609,7 @@ stepSim(); // immediate first fetch
     }).join('');
   }
 
-  /* ── Event log ──────────────────────────────────────────────── */
+  /* ── Event log ──────────────────────────────────────────── */
   function renderEventLog() {
     const el = document.getElementById('event-log');
     el.innerHTML = [...eventLog].reverse().slice(0, 20).map(e => `
@@ -1625,7 +1620,7 @@ stepSim(); // immediate first fetch
       </div>`).join('');
   }
 
-  /* ── UTC Clock ──────────────────────────────────────────────── */
+  /* ── UTC Clock ──────────────────────────────────────────── */
   function tickClock() {
     const n = new Date();
     const h = String(n.getUTCHours()).padStart(2,'0');
@@ -1636,7 +1631,7 @@ stepSim(); // immediate first fetch
   setInterval(tickClock, 1000);
   tickClock();
 
-  /* ── Start ──────────────────────────────────────────────────── */
+  /* ── Kick off ───────────────────────────────────────────── */
   updateUI();
   startLoop();
 
