@@ -162,10 +162,13 @@
     }
 
 
-    /* all sections sit above the canvas */
+    /* all sections sit above the canvas — must be block-level full width */
     section {
       position: relative;
       z-index: 1;
+      display: block;
+      width: 100%;
+      clear: both;
     }
 
 
@@ -588,6 +591,8 @@
     ============================================================ */
     #education {
       background: var(--bg2);
+      display: block;
+      width: 100%;
     }
 
     .edu-card {
@@ -664,6 +669,8 @@
     ============================================================ */
     #experience {
       background: var(--bg);
+      display: block;
+      width: 100%;
     }
 
     .exp-card {
@@ -797,6 +804,8 @@
     ============================================================ */
     #research {
       background: var(--bg2);
+      display: block;
+      width: 100%;
     }
 
     .research-grid {
@@ -956,6 +965,8 @@
     ============================================================ */
     #skills {
       background: var(--bg);
+      display: block;
+      width: 100%;
     }
 
     .skills-layout {
@@ -1024,6 +1035,8 @@
     ============================================================ */
     #projects {
       background: var(--bg2);
+      display: block;
+      width: 100%;
     }
 
     .projects-grid {
@@ -1142,6 +1155,7 @@
       display: block;
       width: 100%;
       clear: both;
+      overflow: hidden;
     }
 
     .leadership-list {
@@ -1210,6 +1224,10 @@
       text-align: center;
       position: relative;
       z-index: 1;
+      display: block;
+      width: 100%;
+      clear: both;
+      float: none;
     }
 
     .contact-inner {
