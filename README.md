@@ -1,4 +1,4 @@
-**What comprises of the PORTFOLIO**
+**The Project description (PORTFOLIO)**
 
 **3D Real-Time Satellite Orbit Tracking System**
 This project tracks real satellites currently in orbit using live data fetched directly from CelesTrak, a public database of Two-Line Element (TLE) sets. 
